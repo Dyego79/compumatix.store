@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-azulCompumatix: #2a6bff;
+  --color-grisCompumatix: #2d2d2d;
+  --font-lexend: Lexend Variable, sans-serif;
+}
+
+body {
+  background-image: url("/img/2149182558.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+}
