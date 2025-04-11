@@ -4,14 +4,13 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev --host",
-    "build": "astro build",
+    "build": "prisma generate && astro build",
     "preview": "astro preview --host",
     "astro": "astro",
     "seed:categories": "tsx scripts/seedCategorias.ts",
     "seed:brands": "tsx scripts/seedBrands.ts",
     "seed:products": "tsx scripts/seedProducts.ts",
-    "seed:clear": "tsx scripts/seedClearDatabase.ts",
-    "postinstall": "prisma generate"
+    "seed:clear": "tsx scripts/seedClearDatabase.ts"
   },
   "dependencies": {
     "@astrojs/node": "^9.1.3",
