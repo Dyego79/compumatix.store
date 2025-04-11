@@ -54,6 +54,7 @@ async function seedProducts() {
     category: string;
     brandId: number;
     brand: string;
+    proveedorIt?: string;
   }
 
   const products = (await fetchJSON(API_URL)) as Product[];
@@ -151,6 +152,7 @@ async function seedProducts() {
               attributes: {},
               categoryId: item.categoryId,
               brandId: item.brandId,
+              proveedorIt: "NB",
             },
             create: {
               externalId: item.id,
@@ -174,6 +176,7 @@ async function seedProducts() {
               attributes: {},
               categoryId: item.categoryId,
               brandId: item.brandId,
+              proveedorIt: "NB",
             },
           });
 

@@ -1,4 +1,90 @@
 ---
+export const prerender = true;
+
+import Layout from "@/layouts/Layout.astro";
+import GagaleryProduct from "@/components/GaleryProduct";
+import FichaProducto from "@/components/FichaProducto.astro";
+import { getProductBySlug } from "@/lib/getProductBySlug";
+import { getFichaProducto } from "@/lib/getFichaProducto";
+import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
+import { formatPesosArgentinos } from "@/utils/formatcurrency";
+import { prisma } from "@/lib/db";
+
+export async function getStaticPaths() {
+  const products = await prisma.product.findMany({
+    select: { slug: true },
+  });
+
+  return products.map((product) => ({
+    params: { slug: product.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  throw new Error("Slug no encontrado.");
+}
+
+const product = await getProductBySlug(slug);
+
+if (!product) {
+  throw new Error("Producto no encontrado.");
+}
+
+// ✅ Llama la ficha usando externalId
+const ficha = product.externalId
+  ? await getFichaProducto(product.externalId)
+  : null;
+
+const precioFinal =
+  product.finalPrice && product.cotizacion
+    ? formatPesosArgentinos(
+        calcularPrecioConGanancia(
+          Number(product.finalPrice) * Number(product.cotizacion)
+        )
+      )
+    : "Precio no disponible";
+
+// ✅ Extrae las imágenes (pueden venir como JSON del campo `images`)
+const rawImages = ficha?.images;
+const galleryImages = Array.isArray(rawImages)
+  ? rawImages.map((image: any) => ({
+      checksum: image.checksum || "default-checksum",
+      order: image.order,
+    }))
+  : [];
+
+console.log("gallery", galleryImages);
+---
+
+<Layout tittle={product.title}>
+  <div
+    class="max-w-[1650px] px-4 mx-auto py-8 grid grid-cols-1 md:grid-cols-2 gap-4"
+  >
+    <div>
+      <GagaleryProduct
+        images={galleryImages}
+        title={product.title}
+        client:load
+      />
+    </div>
+    <div>
+      <h1 class="text-3xl font-bold mt-4">{product.title}</h1>
+      <p class="mt-2 text-gray-600">SKU: {product.sku}</p>
+      <p class="mt-1">Precio: <span>{precioFinal}</span></p>
+      <p class="mt-1 text-sm text-gray-400">
+        Garantía: {product.warranty ?? "No especificada"}
+      </p>
+      <p class="mt-6 text-gray-700">
+        Stock: {product.stock ?? "No disponible"}
+      </p>
+    </div>
+    {product.externalId && <FichaProducto externalId={product.externalId} />}
+  </div>
+</Layout>
+
+<!-- ---
 import FichaProducto from "@/components/FichaProducto.astro";
 import Layout from "@/layouts/Layout.astro";
 import { actions } from "astro:actions";
@@ -38,12 +124,12 @@ if (product.externalId) {
     class="border-2 max-w-[1650px] px-4 mx-auto py-8 grid grid-cols-1 md:grid-cols-2 gap-4"
   >
     <div transition:name={`product-${product.id}-img`}>
-      <!-- <img
+       <img
         src={product.mainImage}
         alt={product.title}
         class="w-full max-h-96 object-contain"
         transition:name={`product-${product.id}-img`}
-      /> -->
+      /> 
       <GagaleryProduct
         images={galleryImages}
         title={product.title}
@@ -78,7 +164,7 @@ if (product.externalId) {
       )
     }
   </div>
-</Layout>
+</Layout> -->
 
 <!-- ---
 // pages/producto/[slug].astro

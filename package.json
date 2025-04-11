@@ -10,6 +10,7 @@
     "seed:categories": "tsx scripts/seedCategorias.ts",
     "seed:brands": "tsx scripts/seedBrands.ts",
     "seed:products": "tsx scripts/seedProducts.ts",
+    "seed:fichaproducto": "tsx scripts/seedFichaProducto.ts",
     "seed:clear": "tsx scripts/seedClearDatabase.ts"
   },
   "dependencies": {
