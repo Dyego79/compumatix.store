@@ -1,4 +1,88 @@
 ---
+export const prerender = false;
+
+import FichaProducto from "@/components/FichaProducto.astro";
+import Layout from "@/layouts/Layout.astro";
+import { actions } from "astro:actions";
+import GagaleryProduct from "@/components/GaleryProduct";
+import { formatPesosArgentinos } from "@/utils/formatcurrency";
+import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
+
+const { slug } = Astro.params;
+
+const { data, error } = await Astro.callAction(
+  actions.getProductBySlug,
+  slug ?? ""
+);
+
+if (error || !data) {
+  return Astro.redirect("/404");
+}
+
+const { product } = data;
+
+/// Obtené galería externa
+let galleryImages: { checksum: string; order?: string }[] = [];
+
+if (product.externalId) {
+  const fichaRes = await Astro.callAction(
+    actions.getFichaProducto,
+    product.externalId
+  );
+  if (!fichaRes.error && fichaRes.data.ficha?.images) {
+    galleryImages = fichaRes.data.ficha.images;
+  }
+}
+---
+
+<Layout tittle={product.title}>
+  <div
+    class="border-2 max-w-[1650px] px-4 mx-auto py-8 grid grid-cols-1 md:grid-cols-2 gap-4"
+  >
+    <div transition:name={`product-${product.id}-img`}>
+      <!-- <img
+        src={product.mainImage}
+        alt={product.title}
+        class="w-full max-h-96 object-contain"
+        transition:name={`product-${product.id}-img`}
+      /> -->
+      <GagaleryProduct
+        images={galleryImages}
+        title={product.title}
+        client:load
+      />
+    </div>
+    <div>
+      <h1
+        class="text-3xl font-bold mt-4"
+        transition:name={`title-${product.title}`}
+      >
+        {product.title}
+      </h1>
+      <p class="mt-2 text-gray-600">SKU: {product.sku}</p>
+      <p class="mt-1">
+        Precio: <span
+          >{
+            formatPesosArgentinos(
+              calcularPrecioConGanancia(
+                product.finalPrice!.toNumber() * product.cotizacion!.toNumber()
+              )
+            )
+          }</span
+        >
+      </p>
+      <p class="mt-1 text-sm text-gray-400">Garantía: {product.warranty}</p>
+      <p class="mt-6 text-gray-700">Stock: {product.stock}</p>
+    </div>
+    {
+      product.externalId !== null && (
+        <FichaProducto externalId={product.externalId} server:defer />
+      )
+    }
+  </div>
+</Layout>
+
+<!-- ---
 export const prerender = true;
 
 import Layout from "@/layouts/Layout.astro";
@@ -83,88 +167,7 @@ console.log("gallery", galleryImages);
     {product.externalId && <FichaProducto externalId={product.externalId} />}
   </div>
 </Layout>
-
-<!-- ---
-import FichaProducto from "@/components/FichaProducto.astro";
-import Layout from "@/layouts/Layout.astro";
-import { actions } from "astro:actions";
-import GagaleryProduct from "@/components/GaleryProduct";
-import { formatPesosArgentinos } from "@/utils/formatcurrency";
-import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
-
-const { slug } = Astro.params;
-
-const { data, error } = await Astro.callAction(
-  actions.getProductBySlug,
-  slug ?? ""
-);
-
-if (error || !data) {
-  return Astro.redirect("/404");
-}
-
-const { product } = data;
-
-/// Obtené galería externa
-let galleryImages: { checksum: string; order?: string }[] = [];
-
-if (product.externalId) {
-  const fichaRes = await Astro.callAction(
-    actions.getFichaProducto,
-    product.externalId
-  );
-  if (!fichaRes.error && fichaRes.data.ficha?.images) {
-    galleryImages = fichaRes.data.ficha.images;
-  }
-}
----
-
-<Layout tittle={product.title}>
-  <div
-    class="border-2 max-w-[1650px] px-4 mx-auto py-8 grid grid-cols-1 md:grid-cols-2 gap-4"
-  >
-    <div transition:name={`product-${product.id}-img`}>
-       <img
-        src={product.mainImage}
-        alt={product.title}
-        class="w-full max-h-96 object-contain"
-        transition:name={`product-${product.id}-img`}
-      /> 
-      <GagaleryProduct
-        images={galleryImages}
-        title={product.title}
-        client:load
-      />
-    </div>
-    <div>
-      <h1
-        class="text-3xl font-bold mt-4"
-        transition:name={`title-${product.title}`}
-      >
-        {product.title}
-      </h1>
-      <p class="mt-2 text-gray-600">SKU: {product.sku}</p>
-      <p class="mt-1">
-        Precio: <span
-          >{
-            formatPesosArgentinos(
-              calcularPrecioConGanancia(
-                product.finalPrice!.toNumber() * product.cotizacion!.toNumber()
-              )
-            )
-          }</span
-        >
-      </p>
-      <p class="mt-1 text-sm text-gray-400">Garantía: {product.warranty}</p>
-      <p class="mt-6 text-gray-700">Stock: {product.stock}</p>
-    </div>
-    {
-      product.externalId !== null && (
-        <FichaProducto externalId={product.externalId} server:defer />
-      )
-    }
-  </div>
-</Layout> -->
+ -->
 
 <!-- ---
 // pages/producto/[slug].astro

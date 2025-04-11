@@ -8,20 +8,10 @@ interface Props {
 
 const { externalId } = Astro.props;
 
-const { data, error } = (await Astro.callAction(
+const { data, error } = await Astro.callAction(
   actions.getFichaProducto,
   externalId
-)) as {
-  data: {
-    ficha: {
-      title: string;
-      description: { value: string };
-      attributes?: { name: string; value: string }[];
-      images?: { checksum: string }[];
-    };
-  };
-  error: unknown;
-};
+);
 
 if (error || !data?.ficha) {
   throw new Error("No se pudo cargar la ficha técnica del producto");

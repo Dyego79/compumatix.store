@@ -2,35 +2,34 @@
 
 import { defineAction } from "astro:actions";
 import { z } from "zod";
-import { obtenerToken } from "@/utils/apiclient";
+import { prisma } from "@/lib/db";
 
 type FichaProducto = {
-  title: string;
-  sku: string;
-  id: number;
-  description: { value: string };
-  attributes: { name: string; value: string }[];
-  images: { checksum: string }[];
-  // ... agregá lo que más uses
+  description?: string;
+  images?: { checksum: string; [key: string]: any }[];
+  attributes?: { name: string; value: string }[];
 };
 
 export const getFichaProducto = defineAction({
   accept: "json",
   input: z.number(),
-  handler: async (externalId): Promise<{ ficha: FichaProducto }> => {
-    const token = await obtenerToken();
-
-    const res = await fetch(`https://api.nb.com.ar/v1/item/${externalId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+  handler: async (externalId): Promise<{ ficha: FichaProducto | null }> => {
+    const ficha = await prisma.fichaProducto.findUnique({
+      where: {
+        productExternalId: externalId,
       },
     });
 
-    if (!res.ok) {
-      throw new Error(`No se pudo obtener la ficha del producto ${externalId}`);
+    if (!ficha) {
+      return { ficha: null };
     }
 
-    const data = await res.json();
-    return { ficha: data };
+    return {
+      ficha: {
+        description: ficha.description ?? undefined,
+        images: ficha.images as any[],
+        attributes: ficha.atributos as any[],
+      },
+    };
   },
 });
