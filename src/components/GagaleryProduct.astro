@@ -1,0 +1,105 @@
+---
+import { generateSlugImage } from "../lib/slug";
+const { images, title } = Astro.props;
+const baseUrl = "https://static.nb.com.ar/i/nb_";
+---
+
+<!-- Swiper CSS -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+
+<!-- Galería principal -->
+<div class="swiper mySwiper2">
+  <div class="swiper-wrapper">
+    {
+      images.map((img: { checksum: any; order: any }) => (
+        <div class="swiper-slide">
+          <img
+            src={`${baseUrl}_ver_${img.checksum}`}
+            alt={`img-${img.order}`}
+          />
+        </div>
+      ))
+    }
+  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
+
+<!-- Miniaturas -->
+<div class="swiper mySwiper">
+  <div class="swiper-wrapper">
+    {
+      images.map((img: { checksum: any; order: any }) => (
+        <div class="swiper-slide">
+          <img
+            src={`${baseUrl}${generateSlugImage(title)}_size_h120_${img.checksum}`}
+            alt={`thumb-${img.order}`}
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<!-- Estilos -->
+<style>
+  .mySwiper {
+    margin-top: 10px;
+  }
+
+  .mySwiper .swiper-slide {
+    width: auto;
+    height: auto;
+    opacity: 0.4;
+    cursor: pointer;
+  }
+
+  .mySwiper .swiper-slide-thumb-active {
+    opacity: 1;
+  }
+
+  .mySwiper img,
+  .mySwiper2 img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: black;
+  }
+</style>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+></script>
+
+<!-- Initialize Swiper (tu estilo) -->
+<script>
+  /* // @ts-expect-error
+  const Swiper = window.Swiper;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var swiper = new Swiper(".mySwiper", {
+      spaceBetween: 10,
+      slidesPerView: 4,
+      freeMode: true,
+      watchSlidesProgress: true,
+    });
+
+    var swiper2 = new Swiper(".mySwiper2", {
+      spaceBetween: 10,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      thumbs: {
+        swiper: swiper,
+      },
+    });
+  }); */
+</script>

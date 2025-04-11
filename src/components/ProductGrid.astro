@@ -1,0 +1,21 @@
+---
+import ProductItem from "./ProductItem.astro";
+
+interface Product {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  slug: string;
+}
+
+const { products } = Astro.props;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  {
+    products.map((product: Product) => (
+      <ProductItem key={product.id} product={product} />
+    ))
+  }
+</div>

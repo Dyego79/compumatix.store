@@ -1,0 +1,47 @@
+---
+// src/components/FichaProducto.astro
+import { actions } from "astro:actions";
+
+interface Props {
+  externalId: number;
+}
+
+const { externalId } = Astro.props;
+
+const { data, error } = (await Astro.callAction(
+  actions.getFichaProducto,
+  externalId
+)) as {
+  data: {
+    ficha: {
+      title: string;
+      description: { value: string };
+      attributes?: { name: string; value: string }[];
+      images?: { checksum: string }[];
+    };
+  };
+  error: unknown;
+};
+
+if (error || !data?.ficha) {
+  throw new Error("No se pudo cargar la ficha técnica del producto");
+}
+
+const ficha = data.ficha;
+const attributes = ficha.attributes ?? [];
+const images = ficha.images ?? [];
+---
+
+<div class="mt-8">
+  <h2 class="text-xl font-semibold mb-2">Ficha técnica</h2>
+
+  <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+    {
+      attributes.map((attr: any) => (
+        <li class="border p-2 rounded">
+          <strong>{attr.name}:</strong> {attr.value}
+        </li>
+      ))
+    }
+  </ul>
+</div>

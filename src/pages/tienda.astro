@@ -1,0 +1,101 @@
+---
+// src/pages/tienda.astro
+import Pagination from "@/components/Paginatation";
+import Layout from "../layouts/Layout.astro";
+import { actions } from "astro:actions";
+import { Image } from "astro:assets";
+import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
+import { formatPesosArgentinos } from "@/utils/formatcurrency";
+
+const searchParams = Astro.url.searchParams;
+const currentPage = parseInt(searchParams.get("pagina") ?? "1", 10);
+const busqueda = searchParams.get("busqueda") ?? "";
+const pageSize = 30;
+
+const { data, error } = await Astro.callAction(actions.getProductsByPage, {
+  page: currentPage,
+  limit: pageSize,
+  query: busqueda,
+});
+
+if (error) {
+  throw new Error("Error al cargar productos");
+}
+
+const { products, totalPages } = data;
+console.log(products[20]);
+---
+
+<Layout tittle="Tienda">
+  <h1>Tienda</h1>
+
+  <!-- Formulario de búsqueda -->
+  <form method="GET" class="mb-4">
+    <input
+      type="text"
+      name="busqueda"
+      value={busqueda}
+      placeholder="Buscar productos..."
+      class="border px-3 py-2 w-full"
+    />
+    <input type="hidden" name="pagina" value="1" />
+    <button type="submit" class="mt-2 px-4 py-2 bg-black text-white">
+      Buscar
+    </button>
+  </form>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    {
+      products.map((product) => (
+        /* <a href={`/producto/${Number(product.externalId)}`} class="border p-2"></a> */
+        <a href={`/producto/${product.slug}`} class="border p-2">
+          <>
+            <div
+              transition:name={`product-${product.id}-img`}
+              class="block md:hidden"
+            >
+              <Image
+                src={product.mainImage}
+                alt={product.title}
+                width={200}
+                height={200}
+                quality={60}
+                class="w-full h-48 object-contain"
+                loading="lazy"
+              />
+            </div>
+            <div
+              transition:name={`product-${product.id}-img`}
+              class="hidden md:block"
+            >
+              <Image
+                src={product.mainImage}
+                alt={product.title}
+                width={500}
+                height={500}
+                quality={60}
+                class="w-full h-48 object-contain"
+                loading="lazy"
+              />
+            </div>
+          </>
+          <h2 transition:name={`title-${product.title}`}>{product.title}</h2>
+          <p>
+            {formatPesosArgentinos(
+              calcularPrecioConGanancia(
+                Number(product.finalPrice) * Number(product.cotizacion!)
+              )
+            )}
+          </p>
+          <p>{product.category.name}</p>
+        </a>
+      ))
+    }
+  </div>
+
+  <Pagination
+    currentPage={currentPage}
+    totalPages={totalPages}
+    busqueda={busqueda}
+  />
+</Layout>

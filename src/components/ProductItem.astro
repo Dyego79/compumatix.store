@@ -1,0 +1,25 @@
+---
+import { formatPesosArgentinos } from "../utils/formatcurrency";
+import { slugify } from "../utils/slugify";
+
+interface Product {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  slug: string;
+}
+
+const { product } = Astro.props;
+const slug = slugify(product.title);
+---
+
+<div class="card">
+  <h3>
+    <a href={`/producto/${product.id}/${slug}`}>
+      {product.title}
+    </a>
+  </h3>
+  <p>{product.description}</p>
+  <p>{formatPesosArgentinos(product.price)}</p>
+</div>

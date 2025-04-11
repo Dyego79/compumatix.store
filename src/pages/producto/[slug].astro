@@ -1,0 +1,149 @@
+---
+import FichaProducto from "@/components/FichaProducto.astro";
+import Layout from "@/layouts/Layout.astro";
+import { actions } from "astro:actions";
+import GagaleryProduct from "@/components/GaleryProduct";
+import { formatPesosArgentinos } from "@/utils/formatcurrency";
+import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
+
+const { slug } = Astro.params;
+
+const { data, error } = await Astro.callAction(
+  actions.getProductBySlug,
+  slug ?? ""
+);
+
+if (error || !data) {
+  return Astro.redirect("/404");
+}
+
+const { product } = data;
+
+/// Obtené galería externa
+let galleryImages: { checksum: string; order?: string }[] = [];
+
+if (product.externalId) {
+  const fichaRes = await Astro.callAction(
+    actions.getFichaProducto,
+    product.externalId
+  );
+  if (!fichaRes.error && fichaRes.data.ficha?.images) {
+    galleryImages = fichaRes.data.ficha.images;
+  }
+}
+---
+
+<Layout tittle={product.title}>
+  <div
+    class="border-2 max-w-[1650px] px-4 mx-auto py-8 grid grid-cols-1 md:grid-cols-2 gap-4"
+  >
+    <div transition:name={`product-${product.id}-img`}>
+      <!-- <img
+        src={product.mainImage}
+        alt={product.title}
+        class="w-full max-h-96 object-contain"
+        transition:name={`product-${product.id}-img`}
+      /> -->
+      <GagaleryProduct
+        images={galleryImages}
+        title={product.title}
+        client:load
+      />
+    </div>
+    <div>
+      <h1
+        class="text-3xl font-bold mt-4"
+        transition:name={`title-${product.title}`}
+      >
+        {product.title}
+      </h1>
+      <p class="mt-2 text-gray-600">SKU: {product.sku}</p>
+      <p class="mt-1">
+        Precio: <span
+          >{
+            formatPesosArgentinos(
+              calcularPrecioConGanancia(
+                product.finalPrice!.toNumber() * product.cotizacion!.toNumber()
+              )
+            )
+          }</span
+        >
+      </p>
+      <p class="mt-1 text-sm text-gray-400">Garantía: {product.warranty}</p>
+      <p class="mt-6 text-gray-700">Stock: {product.stock}</p>
+    </div>
+    {
+      product.externalId !== null && (
+        <FichaProducto externalId={product.externalId} server:defer />
+      )
+    }
+  </div>
+</Layout>
+
+<!-- ---
+// pages/producto/[slug].astro
+export const prerender = false;
+import { getProductBySlug, fetchLiveData } from "../../../src/lib/api";
+import GgaleryProduct from "../../components/GgaleryProduct";
+
+import Layout from "../../layouts/Layout.astro";
+import { formatPesosArgentinos } from "../../utils/formatcurrency";
+
+const { slug } = Astro.params;
+if (!slug) {
+  throw new Error("Slug no encontrado");
+}
+const product = await getProductBySlug(slug);
+
+if (!product) {
+  throw new Error("Producto no encontrado");
+}
+
+if (product.externalId === null) {
+  throw new Error("External ID no válido");
+}
+const liveData = await fetchLiveData(Number(product.externalId));
+console.log(liveData);
+---
+
+<Layout title={product.title}>
+  <section class="container mx-auto grid gap-5 grid-cols-1 md:grid-cols-2">
+    <section>
+      <GgaleryProduct
+        images={liveData.images}
+        title={product.title}
+        client:load
+        transition:name={slug}
+      />
+    </section>
+    <section>
+      <h1>{product.title}</h1>
+
+      <p><strong>Marca:</strong> {product.brandId}</p>
+      <p><strong>Categoría:</strong> {product.categoryId}</p>
+      <p>
+        <strong>Precio:</strong>
+        {
+          formatPesosArgentinos(
+            liveData.price?.finalPrice * liveData.cotizacion
+          )
+        }
+      </p>
+      <p><strong>Stock:</strong> {liveData.amountStock}</p>
+      <p><strong>Garantía:</strong> {product.warranty}</p>
+
+      {
+        liveData.attributes && (
+          <ul>
+            {liveData.attributes.map((attr: { name: any; value: any }) => (
+              <li>
+                <strong>{attr.name}:</strong> {attr.value}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+  </section>
+</Layout>
+ -->

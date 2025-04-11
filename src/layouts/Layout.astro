@@ -3,6 +3,7 @@ import "../styles/global.css";
 // Supports weights 100-900
 import "@fontsource-variable/lexend";
 const { tittle } = Astro.props;
+import { ClientRouter } from "astro:transitions";
 ---
 
 <!doctype html>
@@ -12,18 +13,13 @@ const { tittle } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <ClientRouter />
     <title>{tittle}</title>
   </head>
-  <body class="font-lexend">
+  <body class="font-lexend text-gray-900">
+    <header class="sticky top-0 z-10 bg-white">
+      <a href="/tienda">Header</a>
+    </header>
     <slot />
   </body>
 </html>
-
-<style>
-  html,
-  body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
