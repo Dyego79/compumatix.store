@@ -6,6 +6,7 @@ import { actions } from "astro:actions";
 import { Image } from "astro:assets";
 import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
 import { formatPesosArgentinos } from "@/utils/formatcurrency";
+import ProductGrid from "@/components/ProductGrid.astro";
 
 const searchParams = Astro.url.searchParams;
 const currentPage = parseInt(searchParams.get("pagina") ?? "1", 10);
@@ -44,54 +45,7 @@ console.log(products[20]);
     </button>
   </form>
 
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    {
-      products.map((product) => (
-        /* <a href={`/producto/${Number(product.externalId)}`} class="border p-2"></a> */
-        <a href={`/producto/${product.slug}`} class="border p-2">
-          <>
-            <div
-              transition:name={`product-${product.id}-img`}
-              class="block md:hidden"
-            >
-              <Image
-                src={product.mainImage}
-                alt={product.title}
-                width={200}
-                height={200}
-                quality={60}
-                class="w-full h-48 object-contain"
-                loading="lazy"
-              />
-            </div>
-            <div
-              transition:name={`product-${product.id}-img`}
-              class="hidden md:block"
-            >
-              <Image
-                src={product.mainImage}
-                alt={product.title}
-                width={500}
-                height={500}
-                quality={60}
-                class="w-full h-48 object-contain"
-                loading="lazy"
-              />
-            </div>
-          </>
-          <h2 transition:name={`title-${product.title}`}>{product.title}</h2>
-          <p>
-            {formatPesosArgentinos(
-              calcularPrecioConGanancia(
-                Number(product.finalPrice) * Number(product.cotizacion!)
-              )
-            )}
-          </p>
-          <p>{product.category.name}</p>
-        </a>
-      ))
-    }
-  </div>
+  <ProductGrid products={products} />
 
   <Pagination
     currentPage={currentPage}

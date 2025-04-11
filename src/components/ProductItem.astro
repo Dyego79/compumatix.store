@@ -1,25 +1,56 @@
 ---
-import { formatPesosArgentinos } from "../utils/formatcurrency";
-import { slugify } from "../utils/slugify";
+// src/components/ProductItem.astro
+import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
+import { formatPesosArgentinos } from "@/utils/formatcurrency";
+import { Image } from "astro:assets";
 
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  slug: string;
+interface Props {
+  product: {
+    id: string;
+    title: string;
+    slug: string;
+    mainImage: string;
+    finalPrice: number;
+    cotizacion: number;
+    category: {
+      name: string;
+    };
+  };
 }
 
 const { product } = Astro.props;
-const slug = slugify(product.title);
+
+const precio = formatPesosArgentinos(
+  calcularPrecioConGanancia(product.finalPrice * product.cotizacion)
+);
 ---
 
-<div class="card">
-  <h3>
-    <a href={`/producto/${product.id}/${slug}`}>
-      {product.title}
-    </a>
-  </h3>
-  <p>{product.description}</p>
-  <p>{formatPesosArgentinos(product.price)}</p>
-</div>
+<a href={`/producto/${product.slug}`} class="border p-2">
+  <div transition:name={`product-${product.id}-img`} class="block md:hidden">
+    <Image
+      src={product.mainImage}
+      alt={product.title}
+      width={200}
+      height={200}
+      quality={60}
+      class="w-full h-48 object-contain"
+      loading="lazy"
+    />
+  </div>
+
+  <div transition:name={`product-${product.id}-img`} class="hidden md:block">
+    <Image
+      src={product.mainImage}
+      alt={product.title}
+      width={500}
+      height={500}
+      quality={60}
+      class="w-full h-48 object-contain"
+      loading="lazy"
+    />
+  </div>
+
+  <h2 transition:name={`title-${product.title}`}>{product.title}</h2>
+  <p>{precio}</p>
+  <p>{product.category.name}</p>
+</a>
