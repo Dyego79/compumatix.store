@@ -10,7 +10,8 @@
     "seed:categories": "tsx scripts/seedCategorias.ts",
     "seed:brands": "tsx scripts/seedBrands.ts",
     "seed:products": "tsx scripts/seedProducts.ts",
-    "seed:clear": "tsx scripts/seedClearDatabase.ts"
+    "seed:clear": "tsx scripts/seedClearDatabase.ts",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@astrojs/node": "^9.1.3",
