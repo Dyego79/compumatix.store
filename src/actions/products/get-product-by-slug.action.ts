@@ -17,6 +17,8 @@ export const getProductBySlug = defineAction({
         finalPrice: true,
         externalId: true,
         cotizacion: true,
+        warranty: true,
+        stock: true,
         brand: {
           select: {
             id: true,

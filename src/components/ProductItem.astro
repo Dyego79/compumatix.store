@@ -32,22 +32,10 @@ const precio = formatPesosArgentinos(
       alt={product.title}
       width={200}
       height={200}
-      class="w-full h-48 object-contain"
+      class="w-full h-48 md:h-64 object-contain"
       loading="lazy"
       decoding="async"
       fetchpriority="low"
-    />
-  </div>
-
-  <div transition:name={`product-${product.id}-img`} class="hidden md:block">
-    <Image
-      src={product.mainImage}
-      alt={product.title}
-      width={500}
-      height={500}
-      quality={60}
-      class="w-full h-48 object-contain"
-      loading="lazy"
     />
   </div>
 
