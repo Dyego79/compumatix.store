@@ -26,7 +26,7 @@ const precio = formatPesosArgentinos(
 ---
 
 <a href={`/producto/${product.slug}`} class="border p-2">
-  <div transition:name={`product-${product.id}-img`} class="block md:hidden">
+  <div transition:name={`product-${product.id}-img`}>
     <img
       src={product.mainImage}
       alt={product.title}
