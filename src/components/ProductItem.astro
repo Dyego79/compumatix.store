@@ -27,14 +27,15 @@ const precio = formatPesosArgentinos(
 
 <a href={`/producto/${product.slug}`} class="border p-2">
   <div transition:name={`product-${product.id}-img`} class="block md:hidden">
-    <Image
+    <img
       src={product.mainImage}
       alt={product.title}
       width={200}
       height={200}
-      quality={60}
       class="w-full h-48 object-contain"
       loading="lazy"
+      decoding="async"
+      fetchpriority="low"
     />
   </div>
 

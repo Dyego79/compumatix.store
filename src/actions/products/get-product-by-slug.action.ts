@@ -8,6 +8,28 @@ export const getProductBySlug = defineAction({
   handler: async (slug: string) => {
     const product = await prisma.product.findUnique({
       where: { slug },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        sku: true,
+        mainImage: true,
+        finalPrice: true,
+        externalId: true,
+        cotizacion: true,
+        brand: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
 
     if (!product) {
