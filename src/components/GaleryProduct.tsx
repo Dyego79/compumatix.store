@@ -13,10 +13,10 @@ type Image = {
   order?: string;
 };
 
-type Props = {
-  images: Image[];
+interface Props {
   title: string;
-};
+  images: { hd: string; thumb: string }[];
+}
 
 const baseUrl = "https://static.nb.com.ar/i/nb_";
 
@@ -34,6 +34,7 @@ export default function GaleryProduct({ images, title }: Props) {
   const swiperRef = useRef<any>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  console.log(images);
 
   return (
     <>
@@ -53,16 +54,16 @@ export default function GaleryProduct({ images, title }: Props) {
         spaceBetween={10}
         thumbs={{ swiper: thumbsSwiper }}
         modules={[Navigation, Thumbs]}
-        className="mySwiper2"
+        className="mySwiper2 h-96"
       >
         {images.map((img) => (
           <SwiperSlide
-            key={img.checksum}
+            key={img.hd}
             className="aspect-[1/1] relative rounded-md !flex justify-center items-center p-5"
           >
             <img
-              src={`${baseUrl}_ver_${img.checksum}`}
-              alt={`img-${img.order}`}
+              src={img.hd}
+              alt={`img-${img}`}
               style={{
                 objectFit: "contain",
                 width: "100%",
@@ -107,14 +108,9 @@ export default function GaleryProduct({ images, title }: Props) {
         modules={[FreeMode, Thumbs]}
         className="mySwiper"
       >
-        {images.map((img) => (
-          <SwiperSlide key={img.checksum}>
-            <img
-              src={`${baseUrl}${generateSlugImage(title)}_size_h120_${
-                img.checksum
-              }`}
-              alt={`thumb-${img.order}`}
-            />
+        {images.map((img, i) => (
+          <SwiperSlide key={i}>
+            <img src={img.thumb} alt={`thumb-${img}`} />
           </SwiperSlide>
         ))}
       </Swiper>

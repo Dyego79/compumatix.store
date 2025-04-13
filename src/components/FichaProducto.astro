@@ -19,6 +19,9 @@ if (error || !data?.ficha) {
 
 const ficha = data.ficha;
 const attributes = ficha.attributes ?? [];
+const attributesEntries = Object.entries(attributes);
+console.log("attributes", attributes);
+
 const images = ficha.images ?? [];
 ---
 
@@ -27,9 +30,9 @@ const images = ficha.images ?? [];
 
   <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
     {
-      attributes.map((attr: any) => (
+      attributesEntries.map(([key, value]) => (
         <li class="border p-2 rounded">
-          <strong>{attr.name}:</strong> {attr.value}
+          <strong>{key}:</strong> {value}
         </li>
       ))
     }

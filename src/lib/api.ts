@@ -64,3 +64,26 @@ export async function fetchLiveData(id: number) {
   if (!res.ok) return null;
   return await res.json();
 }
+
+export async function fetchLiveDataSinToken(id: number, token?: string) {
+  if (!token) {
+    token = await obtenerToken(); // fallback si no se pasa
+  }
+
+  const requestOptions: RequestInit = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    redirect: "follow",
+  };
+
+  const res = await fetch(
+    `https://api.nb.com.ar/v1/item/${id}`,
+    requestOptions
+  );
+
+  if (!res.ok) return null;
+
+  return await res.json();
+}

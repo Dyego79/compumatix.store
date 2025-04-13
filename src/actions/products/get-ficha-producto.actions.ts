@@ -1,5 +1,5 @@
 // src/actions/getFichaProducto.ts
-
+const cache = new Map<number, FichaProducto>();
 import { defineAction } from "astro:actions";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
@@ -8,6 +8,8 @@ type FichaProducto = {
   description?: string;
   images?: { checksum: string; [key: string]: any }[];
   attributes?: { name: string; value: string }[];
+  imagesHD?: string[];
+  imagesThumb?: string[];
 };
 
 export const getFichaProducto = defineAction({
@@ -27,7 +29,8 @@ export const getFichaProducto = defineAction({
     return {
       ficha: {
         description: ficha.description ?? undefined,
-        images: ficha.images as any[],
+        imagesHD: ficha.imageUrlsHD as any[],
+        imagesThumb: ficha.imageUrlsThumb as any[],
         attributes: ficha.atributos as any[],
       },
     };

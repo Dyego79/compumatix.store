@@ -4,7 +4,7 @@ export const prerender = false;
 import FichaProducto from "@/components/FichaProducto.astro";
 import Layout from "@/layouts/Layout.astro";
 import { actions } from "astro:actions";
-import GagaleryProduct from "@/components/GaleryProduct";
+import GaleryProduct from "@/components/GaleryProduct";
 import { formatPesosArgentinos } from "@/utils/formatcurrency";
 import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
 
@@ -22,17 +22,28 @@ if (error || !data) {
 const { product } = data;
 
 /// Obtené galería externa
-let galleryImages: { checksum: string; order?: string }[] = [];
+let galleryImages: { hd: string; thumb: string }[] = [];
 
 if (product.externalId) {
   const fichaRes = await Astro.callAction(
     actions.getFichaProducto,
     product.externalId
   );
-  if (!fichaRes.error && fichaRes.data.ficha?.images) {
-    galleryImages = fichaRes.data.ficha.images;
+
+  console.log("fichaRes", fichaRes);
+
+  if (!fichaRes.error && fichaRes.data.ficha) {
+    const imagesHD = fichaRes.data.ficha.imagesHD ?? [];
+    const imagesThumb = fichaRes.data.ficha.imagesThumb ?? [];
+
+    galleryImages = imagesHD.map((hd, i) => ({
+      hd,
+      thumb: imagesThumb[i] ?? hd,
+    }));
   }
 }
+
+console.log("galleryImages", galleryImages);
 ---
 
 <Layout tittle={product.title}>
@@ -46,11 +57,7 @@ if (product.externalId) {
         class="w-full max-h-96 object-contain"
         transition:name={`product-${product.id}-img`}
       /> -->
-      <GagaleryProduct
-        images={galleryImages}
-        title={product.title}
-        client:load
-      />
+      <GaleryProduct images={galleryImages} title={product.title} client:load />
     </div>
     <div>
       <h1

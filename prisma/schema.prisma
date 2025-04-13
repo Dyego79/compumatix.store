@@ -37,7 +37,7 @@ model Product {
   brand         Brand    @relation(fields: [brandId], references: [id])
   category      Category @relation(fields: [categoryId], references: [id])
 
-  FichaProducto FichaProducto[]
+  fichaProducto FichaProducto?
 }
 
 model Category {
@@ -56,13 +56,16 @@ model Brand {
 }
 
 model FichaProducto {
-  id          String   @id @default(uuid())
-  product     Product  @relation(fields: [productExternalId], references: [externalId])
-  productExternalId Int @unique
+  id                  String   @id @default(uuid())
+  product             Product  @relation(fields: [productExternalId], references: [externalId])
+  productExternalId   Int      @unique
 
-  description String?
-  images      Json?
-  atributos   Json?
-  createdAt   DateTime @default(now())
+  description         String?
+  originalImages      Json?    // checksum + order
+  imageUrlsHD         Json?    // array de URLs de UploadThing en alta
+  imageUrlsThumb      Json?    // array de URLs de UploadThing en baja
+
+  atributos           Json?
+  createdAt           DateTime @default(now())
 }
 
