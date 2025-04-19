@@ -34,7 +34,8 @@ export default function GaleryProduct({ images, title }: Props) {
   const swiperRef = useRef<any>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-  console.log(images);
+
+  if (!images.length) return null;
 
   return (
     <>
@@ -54,25 +55,26 @@ export default function GaleryProduct({ images, title }: Props) {
         spaceBetween={10}
         thumbs={{ swiper: thumbsSwiper }}
         modules={[Navigation, Thumbs]}
-        className="mySwiper2 h-96"
+        className="relative aspect-square"
       >
         {images.map((img) => (
           <SwiperSlide
             key={img.hd}
-            className="aspect-[1/1] relative rounded-md !flex justify-center items-center p-5"
+            className="rounded-md !flex justify-center items-center  h-full w-full"
           >
             <img
               src={img.hd}
               alt={`img-${img}`}
               style={{
-                objectFit: "contain",
+                objectFit: "fill",
                 width: "100%",
-                height: "100%",
               }}
+              loading="lazy"
+              decoding="async"
             />
           </SwiperSlide>
         ))}
-        <div className="flex justify-between gap-2 absolute right-2 bottom-2 z-10">
+        <div className="flex gap-2 absolute right-2 bottom-2 z-10">
           <button
             onClick={() => swiperRef.current?.slidePrev()}
             disabled={isBeginning}
@@ -106,11 +108,17 @@ export default function GaleryProduct({ images, title }: Props) {
         freeMode
         watchSlidesProgress
         modules={[FreeMode, Thumbs]}
-        className="mySwiper"
+        className="h-32 !flex"
       >
         {images.map((img, i) => (
-          <SwiperSlide key={i}>
-            <img src={img.thumb} alt={`thumb-${img}`} />
+          <SwiperSlide key={i} className="!aspect-square !w-fit">
+            <img
+              loading="lazy"
+              decoding="async"
+              src={img.thumb}
+              alt={`thumb-${img}`}
+              className="object-cover w-full"
+            />
           </SwiperSlide>
         ))}
       </Swiper>

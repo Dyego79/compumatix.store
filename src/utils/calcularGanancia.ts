@@ -1,5 +1,5 @@
-const ganancia1 = 1.6;
-const ganancia2 = 1.3;
+const ganancia1 = 1.8;
+const ganancia2 = 1.4;
 const ganancia3 = 1.2;
 
 export function calcularPrecioConGanancia(precioBase: number): number {

@@ -21,10 +21,26 @@ export const getProductsByPage = defineAction({
   }) => {
     page = page <= 0 ? 1 : page;
 
-    const where = {
+    /* const where = {
       OR: [
         { title: { contains: query, mode: Prisma.QueryMode.insensitive } },
         { sku: { contains: query, mode: Prisma.QueryMode.insensitive } },
+      ],
+    }; */
+
+    const where = {
+      AND: [
+        {
+          OR: [
+            { title: { contains: query, mode: Prisma.QueryMode.insensitive } },
+            { sku: { contains: query, mode: Prisma.QueryMode.insensitive } },
+          ],
+        },
+        {
+          stock: {
+            not: "Sin stock",
+          },
+        },
       ],
     };
 
@@ -45,6 +61,11 @@ export const getProductsByPage = defineAction({
           finalPrice: true,
           externalId: true,
           cotizacion: true,
+          stock: true,
+          widthAverage: true,
+          highAverage: true,
+          weightAverage: true,
+          lengthAverage: true,
           brand: {
             select: {
               id: true,

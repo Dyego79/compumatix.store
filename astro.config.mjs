@@ -9,11 +9,11 @@ import vercel from "@astrojs/vercel";
 // https://astro.build/config
 export default defineConfig({
   image: {
-    domains: ["static.nb.com.ar"],
+    domains: ["adzzhtf38t.ufs.sh"],
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "static.nb.com.ar",
+        hostname: "adzzhtf38t.ufs.sh",
         pathname: "/**",
       },
     ],

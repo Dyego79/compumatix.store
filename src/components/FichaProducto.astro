@@ -1,28 +1,12 @@
 ---
-// src/components/FichaProducto.astro
-import { actions } from "astro:actions";
-
 interface Props {
-  externalId: number;
+  ficha: any;
 }
 
-const { externalId } = Astro.props;
+const { ficha } = Astro.props;
 
-const { data, error } = await Astro.callAction(
-  actions.getFichaProducto,
-  externalId
-);
-
-if (error || !data?.ficha) {
-  throw new Error("No se pudo cargar la ficha técnica del producto");
-}
-
-const ficha = data.ficha;
-const attributes = ficha.attributes ?? [];
+const attributes = ficha.attributes ?? {};
 const attributesEntries = Object.entries(attributes);
-console.log("attributes", attributes);
-
-const images = ficha.images ?? [];
 ---
 
 <div class="mt-8">
@@ -32,7 +16,7 @@ const images = ficha.images ?? [];
     {
       attributesEntries.map(([key, value]) => (
         <li class="border p-2 rounded">
-          <strong>{key}:</strong> {value}
+          <strong>{key}:</strong> {String(value)}
         </li>
       ))
     }

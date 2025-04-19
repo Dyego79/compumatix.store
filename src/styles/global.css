@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@plugin 'tailwind-scrollbar';
 
 @theme {
   --color-azulCompumatix: #2a6bff;
@@ -130,4 +131,23 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Aplica a navegadores basados en WebKit */
+.scroll-personalizado::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scroll-personalizado::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-personalizado::-webkit-scrollbar-thumb {
+  background-color: #242b91;
+  border-radius: 6px;
+}
+
+.scroll-personalizado::-webkit-scrollbar-thumb:hover {
+  background-color: #36cf17;
 }

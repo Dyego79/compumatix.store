@@ -7,6 +7,7 @@ import { actions } from "astro:actions";
 import GaleryProduct from "@/components/GaleryProduct";
 import { formatPesosArgentinos } from "@/utils/formatcurrency";
 import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
+import AddToCart from "@/components/AddToCart";
 
 const { slug } = Astro.params;
 
@@ -21,7 +22,14 @@ if (error || !data) {
 
 const { product } = data;
 
-/// Obtené galería externa
+// Ensure product includes required properties
+product.weightAverage = product.weightAverage ?? 0;
+product.highAverage = product.highAverage ?? 0;
+product.widthAverage = product.widthAverage ?? 0;
+product.lengthAverage = product.lengthAverage ?? 0;
+
+/// Obtené galería externa y ficha técnica
+let ficha = null;
 let galleryImages: { hd: string; thumb: string }[] = [];
 
 if (product.externalId) {
@@ -30,11 +38,11 @@ if (product.externalId) {
     product.externalId
   );
 
-  console.log("fichaRes", fichaRes);
-
   if (!fichaRes.error && fichaRes.data.ficha) {
-    const imagesHD = fichaRes.data.ficha.imagesHD ?? [];
-    const imagesThumb = fichaRes.data.ficha.imagesThumb ?? [];
+    ficha = fichaRes.data.ficha;
+
+    const imagesHD = ficha.imagesHD ?? [];
+    const imagesThumb = ficha.imagesThumb ?? [];
 
     galleryImages = imagesHD.map((hd, i) => ({
       hd,
@@ -42,8 +50,6 @@ if (product.externalId) {
     }));
   }
 }
-
-console.log("galleryImages", galleryImages);
 ---
 
 <Layout tittle={product.title}>
@@ -51,13 +57,7 @@ console.log("galleryImages", galleryImages);
     class="border-2 max-w-[1650px] px-4 mx-auto py-8 grid grid-cols-1 md:grid-cols-2 gap-4"
   >
     <div transition:name={`product-${product.id}-img`}>
-      <!-- <img
-        src={product.mainImage}
-        alt={product.title}
-        class="w-full max-h-96 object-contain"
-        transition:name={`product-${product.id}-img`}
-      /> -->
-      <GaleryProduct images={galleryImages} title={product.title} client:load />
+      <GaleryProduct images={galleryImages} title={product.title} client:idle />
     </div>
     <div>
       <h1
@@ -68,25 +68,34 @@ console.log("galleryImages", galleryImages);
       </h1>
       <p class="mt-2 text-gray-600">SKU: {product.sku}</p>
       <p class="mt-1">
-        Precio: <span
-          >{
+        Precio:
+        <span>
+          {
             formatPesosArgentinos(
               calcularPrecioConGanancia(
                 product.finalPrice!.toNumber() * product.cotizacion!.toNumber()
               )
             )
-          }</span
-        >
+          }
+        </span>
       </p>
       <p class="mt-1 text-sm text-gray-400">Garantía: {product.warranty}</p>
       <p class="mt-6 text-gray-700">Stock: {product.stock}</p>
     </div>
-    {
-      product.externalId !== null && (
-        <FichaProducto externalId={product.externalId} server:defer />
-      )
-    }
+    <AddToCart
+      product={{
+        ...product,
+        finalPrice: product.finalPrice?.toNumber() ?? 0,
+        weight: product.weightAverage,
+        height: product.highAverage,
+        width: product.widthAverage,
+        length: product.lengthAverage,
+        cotizacion: product.cotizacion?.toNumber() ?? 0,
+      }}
+      client:load
+    />
   </div>
+  {ficha !== null && <FichaProducto ficha={ficha} server:defer />}
 </Layout>
 
 <!-- ---

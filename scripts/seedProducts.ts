@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import slugify from "slugify";
 import fs from "fs";
 import { obtenerToken } from "@/utils/apiclient";
+import { subirImagenAUploadThing } from "@/lib/uploadthingProduct";
 
 const prisma = new PrismaClient();
 const API_URL = "https://api.nb.com.ar/v1/";
@@ -126,7 +127,10 @@ async function seedProducts() {
             return;
           }
         }
-
+        const mainImageUrl = await subirImagenAUploadThing(item.mainImage);
+        const mainImageExpUrl = item.mainImageExp
+          ? await subirImagenAUploadThing(item.mainImageExp)
+          : null;
         // Producto (crear o actualizar)
         try {
           await prisma.product.upsert({
@@ -135,8 +139,8 @@ async function seedProducts() {
               title: item.title,
               slug,
               sku: item.sku,
-              mainImage: item.mainImage,
-              mainImageExp: item.mainImageExp,
+              mainImage: mainImageUrl ?? item.mainImage,
+              mainImageExp: mainImageExpUrl ?? item.mainImageExp,
               warranty: item.warranty,
               stock: item.stock,
               amountStock: item.amountStock,
@@ -159,8 +163,8 @@ async function seedProducts() {
               title: item.title,
               slug,
               sku: item.sku,
-              mainImage: item.mainImage,
-              mainImageExp: item.mainImageExp,
+              mainImage: mainImageUrl ?? item.mainImage,
+              mainImageExp: mainImageExpUrl ?? item.mainImageExp,
               warranty: item.warranty,
               stock: item.stock,
               amountStock: item.amountStock,

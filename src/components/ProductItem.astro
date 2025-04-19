@@ -1,45 +1,69 @@
 ---
-// src/components/ProductItem.astro
+//ProudctItem.astro
+
 import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
 import { formatPesosArgentinos } from "@/utils/formatcurrency";
 import { Image } from "astro:assets";
-
-interface Props {
-  product: {
-    id: string;
-    title: string;
-    slug: string;
-    mainImage: string;
-    finalPrice: number;
-    cotizacion: number;
-    category: {
-      name: string;
-    };
-  };
-}
+import AddToCart from "./AddToCart";
 
 const { product } = Astro.props;
 
 const precio = formatPesosArgentinos(
   calcularPrecioConGanancia(product.finalPrice * product.cotizacion)
 );
+const imageUrl = product.mainImage;
+product.weightAverage = product.weightAverage ?? 0;
+product.highAverage = product.highAverage ?? 0;
+product.widthAverage = product.widthAverage ?? 0;
+product.lengthAverage = product.lengthAverage ?? 0;
 ---
 
-<a href={`/producto/${product.slug}`} class="border p-2">
+<dic class="relative border p-2 flex flex-col bg-white py-16 px-3">
+  <div class="flex flex-col absolute right-0 top-2 z-[1] items-end">
+    <span class="text-sm px-3 py-1 bg-azulCompumatix text-white">EN STOCK</span>
+    <span
+      class:list={{
+        "bg-green-600 text-white": product.stock === "Alto",
+        "bg-orange-500 text-white": product.stock === "Medio",
+        "bg-red-600 text-white": product.stock === "Bajo",
+      }}
+      class="px-3 py-1 text-[0.75rem] w-fit uppercase"
+    >
+      {product.stock}
+    </span>
+  </div>
   <div transition:name={`product-${product.id}-img`}>
-    <img
-      src={product.mainImage}
-      alt={product.title}
-      width={200}
-      height={200}
-      class="w-full h-48 md:h-64 object-contain"
-      loading="lazy"
-      decoding="async"
-      fetchpriority="low"
-    />
+    <a href={`/producto/${product.slug}`}>
+      <img
+        src={product.mainImage}
+        srcset={`${product.mainImage} 400w`}
+        sizes="(max-width: 640px) 150px, 400px"
+        alt={product.title}
+        width="400"
+        height="400"
+        class="w-full h-48 md:h-64 object-contain"
+        loading="lazy"
+        decoding="async"
+      /></a
+    >
+  </div>
+  <div class="text-gray-400">
+    <p>{product.category.name}</p>
   </div>
 
   <h2 transition:name={`title-${product.title}`}>{product.title}</h2>
   <p>{precio}</p>
-  <p>{product.category.name}</p>
-</a>
+  <p>{product.stock}</p>
+  <AddToCart
+    product={{
+      ...product,
+      finalPrice: product.finalPrice?.toNumber() ?? 0,
+      weight: product.weightAverage,
+      height: product.highAverage,
+      width: product.widthAverage,
+      length: product.lengthAverage,
+      cotizacion: product.cotizacion?.toNumber() ?? 0,
+    }}
+    client:load
+  />
+</dic>

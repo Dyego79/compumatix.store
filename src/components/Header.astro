@@ -1,0 +1,66 @@
+---
+import Logo from "@/assets/logo_cpx_light_3.svg";
+import OffcanvasCarrito from "./OffCanvasCart";
+const searchParams = Astro.url.searchParams;
+const busqueda = searchParams.get("busqueda") ?? "";
+---
+
+<header class="sticky top-0 z-10 flex items-center justify-between gap-4 p-4 border-b border-gray-300 bg-grisCompumatix text-slate-200 h-28">
+  <a href="/tienda" class="flex items-center gap-2">
+    <img class="w-36" src={Logo.src} alt="Logo Compumatix" />
+    <span class="text-xl font-semibold text-[0%]">Compumatix</span>
+  </a>
+
+  <!-- 🔍 Barra de búsqueda -->
+  <form method="GET" action="/tienda" class="flex gap-2 items-center max-w-md w-full">
+    <div class="relative w-full">
+      <!-- 🔍 Icono de lupa -->
+      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+        </svg>
+      </span>
+  
+      <!-- 🔤 Campo de búsqueda -->
+      <input
+        type="text"
+        name="busqueda"
+        value={busqueda}
+        id="busqueda-input"
+        placeholder="Buscar productos..."
+        class="border px-3 py-2 pl-9 pr-9 rounded w-full"
+      />
+  
+      <!-- ❌ Botón limpiar que redirige a /tienda -->
+      {busqueda && (
+        <button
+          type="button"
+          onclick="window.location.href='/tienda'"
+          class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+          aria-label="Limpiar búsqueda"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      )}
+    </div>
+  
+    <!-- 🔘 Botón de enviar búsqueda -->
+    <button
+      type="submit"
+      class="px-4 py-2 bg-azulCompumatix text-white rounded hover:bg-blue-700"
+    >
+      Buscar
+    </button>
+  </form>
+  {busqueda && (
+    <script type="module" is:inline>
+      const clearBtn = document.getElementById("clear-search");
+      clearBtn?.addEventListener("click", () => {
+        window.location.href = "/tienda";
+      });
+    </script>
+  )}
+  <OffcanvasCarrito client:load/>
+</header>

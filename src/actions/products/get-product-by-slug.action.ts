@@ -19,6 +19,10 @@ export const getProductBySlug = defineAction({
         cotizacion: true,
         warranty: true,
         stock: true,
+        widthAverage: true,
+        highAverage: true,
+        weightAverage: true,
+        lengthAverage: true,
         brand: {
           select: {
             id: true,
