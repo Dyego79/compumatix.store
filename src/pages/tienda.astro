@@ -13,10 +13,13 @@ const currentPage = parseInt(searchParams.get("pagina") ?? "1", 10);
 const busqueda = searchParams.get("busqueda") ?? "";
 const pageSize = 24;
 
+const orden = searchParams.get("orden") ?? "alfabetico_asc";
+
 const { data, error } = await Astro.callAction(actions.getProductsByPage, {
   page: currentPage,
   limit: pageSize,
   query: busqueda,
+  orden,
 });
 
 if (error) {
@@ -41,10 +44,53 @@ const { products, totalPages } = data;
       Buscar
     </button>
   </form> -->
-  <ProductGrid products={products} />
-  <Pagination
-    currentPage={currentPage}
-    totalPages={totalPages}
-    busqueda={busqueda}
-  />
+  <section class="container mx-auto py-4 md:py-12 md:px-6">
+    <div class="flex flex-wrap items-center gap-2 mb-6">
+      <a
+        href={`?orden=alfabetico_asc${busqueda ? `&busqueda=${busqueda}` : ""}`}
+        class={`px-3 py-1 rounded border ${
+          orden === "alfabetico_asc"
+            ? "bg-black text-white"
+            : "bg-white text-black"
+        }`}
+      >
+        A - Z
+      </a>
+      <a
+        href={`?orden=alfabetico_desc${busqueda ? `&busqueda=${busqueda}` : ""}`}
+        class={`px-3 py-1 rounded border ${
+          orden === "alfabetico_desc"
+            ? "bg-black text-white"
+            : "bg-white text-black"
+        }`}
+      >
+        Z - A
+      </a>
+      <a
+        href={`?orden=precio_asc${busqueda ? `&busqueda=${busqueda}` : ""}`}
+        class={`px-3 py-1 rounded border ${
+          orden === "precio_asc" ? "bg-black text-white" : "bg-white text-black"
+        }`}
+      >
+        Precio ↑
+      </a>
+      <a
+        href={`?orden=precio_desc${busqueda ? `&busqueda=${busqueda}` : ""}`}
+        class={`px-3 py-1 rounded border ${
+          orden === "precio_desc"
+            ? "bg-black text-white"
+            : "bg-white text-black"
+        }`}
+      >
+        Precio ↓
+      </a>
+    </div>
+
+    <ProductGrid products={products} />
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      busqueda={busqueda}
+    />
+  </section>
 </Layout>

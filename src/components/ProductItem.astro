@@ -5,6 +5,7 @@ import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
 import { formatPesosArgentinos } from "@/utils/formatcurrency";
 import { Image } from "astro:assets";
 import AddToCart from "./AddToCart";
+import { IoCart } from "react-icons/io5";
 
 const { product } = Astro.props;
 
@@ -18,19 +19,24 @@ product.widthAverage = product.widthAverage ?? 0;
 product.lengthAverage = product.lengthAverage ?? 0;
 ---
 
-<dic class="relative border p-2 flex flex-col bg-white py-16 px-3">
+<dic
+  class="relative border p-2 flex flex-col bg-white py-4 md:py-6 md:px-3 rounded-md overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+>
   <div class="flex flex-col absolute right-0 top-2 z-[1] items-end">
-    <span class="text-sm px-3 py-1 bg-azulCompumatix text-white">EN STOCK</span>
     <span
+      class="text-[0.75rem] md:text-sm px-2 py-1 bg-azulCompumatix text-white"
+      >EN STOCK</span
+    >
+    <!-- <span
       class:list={{
         "bg-green-600 text-white": product.stock === "Alto",
         "bg-orange-500 text-white": product.stock === "Medio",
         "bg-red-600 text-white": product.stock === "Bajo",
       }}
-      class="px-3 py-1 text-[0.75rem] w-fit uppercase"
+      class="px-3 py-1 text-[0.62rem] md:text-[0.75rem] w-fit uppercase"
     >
       {product.stock}
-    </span>
+    </span> -->
   </div>
   <div transition:name={`product-${product.id}-img`}>
     <a href={`/producto/${product.slug}`}>
@@ -48,13 +54,20 @@ product.lengthAverage = product.lengthAverage ?? 0;
     >
   </div>
   <div class="text-gray-400">
-    <p>{product.category.name}</p>
+    <p class="text-azulCompumatix rounded-full my-2 text-sm w-fit">
+      {product.category.name}
+    </p>
   </div>
 
-  <h2 transition:name={`title-${product.title}`}>{product.title}</h2>
-  <p>{precio}</p>
-  <p>{product.stock}</p>
-  <AddToCart
+  <h3
+    class="text-[0.85rem] md:text-[1rem] leading-4 min-h-16"
+    transition:name={`title-${product.title}`}
+  >
+    {product.title}
+  </h3>
+  <p class="text-xl my-3">{precio}</p>
+  <p class="text-xl my-3">{product.price * product.cotizacion}</p>
+  <!-- <AddToCart
     product={{
       ...product,
       finalPrice: product.finalPrice?.toNumber() ?? 0,
@@ -65,5 +78,11 @@ product.lengthAverage = product.lengthAverage ?? 0;
       cotizacion: product.cotizacion?.toNumber() ?? 0,
     }}
     client:load
-  />
+  /> -->
+  <a
+    href={`/producto/${product.slug}`}
+    class="bg-azulCompumatix rounded-md flex items-center justify-center p-3 text-white font-bold text-sm mt-2 hover:bg-azulCompumatix/80 transition-colors duration-300 ease-in-out"
+    class="bg-azulCompumatix rounded-md flex items-center justify-center p-3 text-white font-bold text-sm mt-2 hover:bg-azulCompumatix/80 transition-colors duration-300 ease-in-out"
+    ><IoCart color="white" size={22} /></a
+  >
 </dic>

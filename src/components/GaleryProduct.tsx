@@ -55,20 +55,17 @@ export default function GaleryProduct({ images, title }: Props) {
         spaceBetween={10}
         thumbs={{ swiper: thumbsSwiper }}
         modules={[Navigation, Thumbs]}
-        className="relative aspect-square"
+        className="relative aspect-square bg-white"
       >
         {images.map((img) => (
           <SwiperSlide
             key={img.hd}
-            className="rounded-md !flex justify-center items-center  h-full w-full"
+            className="rounded-md !flex justify-center items-center h-full w-full"
           >
             <img
               src={img.hd}
               alt={`img-${img}`}
-              style={{
-                objectFit: "fill",
-                width: "100%",
-              }}
+              className="object-contain h-full w-full"
               loading="lazy"
               decoding="async"
             />
@@ -103,21 +100,24 @@ export default function GaleryProduct({ images, title }: Props) {
 
       <Swiper
         onSwiper={setThumbsSwiper}
-        spaceBetween={10}
-        slidesPerView={4}
+        spaceBetween={5}
+        slidesPerView="auto"
         freeMode
         watchSlidesProgress
         modules={[FreeMode, Thumbs]}
-        className="h-32 !flex"
+        className="h-32 overflow-x-auto"
       >
         {images.map((img, i) => (
-          <SwiperSlide key={i} className="!aspect-square !w-fit">
+          <SwiperSlide
+            key={i}
+            className="!w-24 !aspect-square flex items-center justify-center"
+          >
             <img
               loading="lazy"
               decoding="async"
               src={img.thumb}
               alt={`thumb-${img}`}
-              className="object-cover w-full"
+              className="object-contain h-24 w-24 bg-white"
             />
           </SwiperSlide>
         ))}

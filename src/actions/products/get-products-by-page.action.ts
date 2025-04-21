@@ -9,17 +9,38 @@ export const getProductsByPage = defineAction({
     page: z.number().optional().default(1),
     limit: z.number().optional().default(12),
     query: z.string().optional().default(""),
+    orden: z.string().optional().default("alfabetico_asc"),
   }),
+
   handler: async ({
     page,
     limit,
     query,
+    orden,
   }: {
     page: number;
     limit: number;
     query: string;
+    orden: string;
   }) => {
     page = page <= 0 ? 1 : page;
+    let orderBy: Prisma.ProductOrderByWithRelationInput = { title: "asc" };
+
+    switch (orden) {
+      case "precio_asc":
+        orderBy = { finalPrice: "asc" };
+        break;
+      case "precio_desc":
+        orderBy = { finalPrice: "desc" };
+        break;
+      case "alfabetico_desc":
+        orderBy = { title: "desc" };
+        break;
+      case "alfabetico_asc":
+      default:
+        orderBy = { title: "asc" };
+        break;
+    }
 
     /* const where = {
       OR: [
@@ -50,7 +71,7 @@ export const getProductsByPage = defineAction({
         where,
         skip: (page - 1) * limit,
         take: limit,
-        orderBy: { title: "asc" },
+        orderBy, // 👈 esta es la que definiste arriba con el switch
         select: {
           id: true,
           title: true,
