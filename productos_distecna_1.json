@@ -1,0 +1,514 @@
+[
+  {
+    "codigo": "760249702",
+    "nombre": "O-012-CA-8Z-M12BK/28G/093",
+    "precio": 1.82,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "760249693",
+    "nombre": "O-012-CN-8Z-M12BK/28G/093",
+    "precio": 1.37,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "760249708",
+    "nombre": "O-012-CA-5X-M12BK/28G/093",
+    "precio": 8.68,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "920-004428",
+    "nombre": "Combo Logitech Teclado y Mouse USB MK120",
+    "precio": 12.23,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/LOG920-004428/LOG920-004428·P.jpg",
+    "marca": "Logitech"
+  },
+  {
+    "codigo": "760249707",
+    "nombre": "O-006-CA-5X-M06BK/28G/093",
+    "precio": 5.09,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "NPC6ASVDB-WT002F",
+    "nombre": "NPC, STP CAT 6A, Shielded, White, 2FT",
+    "precio": 4.85,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COMNPC6ASVDB-WT002F/COMNPC6ASVDB-WT002F·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "Z6A-S01B",
+    "nombre": "OUTLET RJ45 (Jacks) linea Z MAX F/UTP Categoria 6A...",
+    "precio": 9.84,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/SIEZ6A-S01B/SIEZ6A-S01B·P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "760248523",
+    "nombre": "SMB-1P-266, 1 PORT PROWHITE",
+    "precio": 2.28,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "NPC6ASVDB-WT006F",
+    "nombre": "PATCHCORD XG CATEGORIA 6A F/UTP 6 PIES BLANCO - CO...",
+    "precio": 8.77,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "6-2111979-3",
+    "nombre": "MP-6S-B-1: 6 SHD 5.1-6.0, 100",
+    "precio": 1.03,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "NPC06UVDB-BL008F",
+    "nombre": "NPC Cat 6, UTP, CM, BL, 8FT",
+    "precio": 4.57,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COMNPC06UVDB-BL008F/COMNPC06UVDB-BL008F·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "NPC6ASVDB-WT008F",
+    "nombre": "PATCHCORD XG CATEGORIA 6A F/UTP 8 PIES BLANCO - CO...",
+    "precio": 12.44,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "NPC06UVDB-BK008F",
+    "nombre": "NPC Cat 6, UTP, CM, BK, 8FT",
+    "precio": 8.38,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COMNPC06UVDB-BK008F/COMNPC06UVDB-BK008F·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "1-1116412-3",
+    "nombre": "INSERT,BLANK,SL SER,A.WHT",
+    "precio": 0.22,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COM1-1116412-3/COM1-1116412-3·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "NPC06UVDB-BL004F",
+    "nombre": "NPC Cat 6, UTP, CM, BL, 4FT",
+    "precio": 3.35,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "NPC06UVDB-BL002F",
+    "nombre": "NPC Cat 6, UTP, CM, BL, 2FT",
+    "precio": 3.2,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COMNPC06UVDB-BL002F/COMNPC06UVDB-BL002F·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "U6-K02NB",
+    "nombre": "Copper, Outlet, ULTRAMAX, UTP, Category 6, RJ45, K...",
+    "precio": 5,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "U6-H02NB",
+    "nombre": "Copper, Outlet, ULTRAMAX, UTP, Category 6, RJ45, H...",
+    "precio": 4.83,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "10GMX-FPS02-02",
+    "nombre": "Placas frontales (faceplate) de 2 puertos blanca",
+    "precio": 4.92,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/SIE10GMX-FPS02-02/SIE10GMX-FPS02-02·P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "910-004940",
+    "nombre": "Mouse Logitech  Inalámbrico M170 Negro",
+    "precio": 6.43,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/LOG910-004940/LOG910-004940·P.jpg",
+    "marca": "Logitech"
+  },
+  {
+    "codigo": "1-2111008-3",
+    "nombre": "FP KT,LBL,SGL GNG,1P,SL,A.WHT",
+    "precio": 2.34,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COM1-2111008-3/COM1-2111008-3·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "981-000014",
+    "nombre": "Auricular Logitech c/micrófono   H390 USB Black",
+    "precio": 32.68,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/LOG981-000014/LOG981-000014·P.jpg",
+    "marca": "Logitech"
+  },
+  {
+    "codigo": "910-004053",
+    "nombre": "Mouse Logitech  M90 USB Negro",
+    "precio": 3.58,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/LOG910-004053/LOG910-004053·P.jpg",
+    "marca": "Logitech"
+  },
+  {
+    "codigo": "2153365-4",
+    "nombre": "AMP-TWIST SLX,6AS W/DC,GY",
+    "precio": 4.89,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "MC6-05-02-28",
+    "nombre": "Copper,Patch Cord,RJ45,RJ45,Category 6,UTP,T568A/B...",
+    "precio": 6.4,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "MC6-03-06-28",
+    "nombre": "Copper,Patch Cord,RJ45,RJ45,Category 6,UTP,T568A/B...",
+    "precio": 5.73,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "MC6-03-01-28",
+    "nombre": "Copper,Patch Cord,RJ45,RJ45,Category 6,UTP,T568A/B...",
+    "precio": 5.73,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "1427071-4",
+    "nombre": "CS30CM GRY C6 4/24 U/UTP RIB 305M",
+    "precio": 167.3,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COM1427071-4/COM1427071-4·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "NPC06UVDB-BK010F",
+    "nombre": "NPC Cat 6, UTP, CM, BK, 10FT",
+    "precio": null,
+    "stock": null,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "CR-D2",
+    "nombre": "FICHA PLUG HEMBRA PARA ALIMENTACION CON BORNERAS",
+    "precio": 0.36,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Dahua"
+  },
+  {
+    "codigo": "NPC06UVDB-BL006F",
+    "nombre": "NPC Cat 6, UTP, CM, BL, 6FT",
+    "precio": 4.33,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COMNPC06UVDB-BL006F/COMNPC06UVDB-BL006F·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "PC6A-S001MA02LS",
+    "nombre": "Copper, Patch Cord, RJ45, RJ45, Category 6A, F/UTP...",
+    "precio": 5.86,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "2843022-2",
+    "nombre": "MP-COLORCLIP-BLACK-50",
+    "precio": 0.14,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COM2843022-2/COM2843022-2·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "760237040",
+    "nombre": "CPP-UDDM-SL-1U-24",
+    "precio": 44.38,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COM760237040/COM760237040·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "6-569530-2",
+    "nombre": "MP-88S-R-5: SHLD, RND, 500PK",
+    "precio": 0.62,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "AL-2000",
+    "nombre": "Cable de Seguridad con combinación (Kensington)",
+    "precio": 5.55,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/TARAL-2000/TARAL-2000·P.jpg",
+    "marca": "Targus"
+  },
+  {
+    "codigo": "LJDS060064G-BNBNG",
+    "nombre": "Pendrive LEXAR JumpDrive S60 - 64GB USB 2.0 Black ...",
+    "precio": 6.09,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/LXALJDS060064G-BNBNG/LXALJDS060064G-BNBNG·P.jpg",
+    "marca": "LEXAR"
+  },
+  {
+    "codigo": "PC6-003M-A02LS",
+    "nombre": "Copper, Patch Cord, RJ45, RJ45, Category 6, UTP, T...",
+    "precio": 6.32,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "PC6A-S002MA02LS",
+    "nombre": "Copper, Patch Cord, RJ45, RJ45, Category 6A, F/UTP...",
+    "precio": 8.04,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "NPC06UVDB-BK006F",
+    "nombre": "NPC Cat 6, UTP, CM, BK, 6FT",
+    "precio": 8.2,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COMNPC06UVDB-BK006F/COMNPC06UVDB-BK006F·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "760154765",
+    "nombre": "Z-012-LN-8W-F12BK/25D/E",
+    "precio": 2.49,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COM760154765/COM760154765·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "1-2111022-3",
+    "nombre": "FP KIT,NLBL,SGL GNG,2P,SL,A.WHT",
+    "precio": 1.06,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "910-004284",
+    "nombre": "Mouse Logitech Inalámbrico M280 Negro",
+    "precio": 10.54,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/LOG910-004284/LOG910-004284·P.jpg",
+    "marca": "Logitech"
+  },
+  {
+    "codigo": "SC-00DA",
+    "nombre": "One:Quick Share",
+    "precio": 9.5,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "LG"
+  },
+  {
+    "codigo": "PC6A-S003MA02LS",
+    "nombre": "Copper, Patch Cord, RJ45, RJ45, Category 6A, F/UTP...",
+    "precio": 7.27,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "NPC06UVDB-BK033F",
+    "nombre": "NPC Cat 6, UTP, CM, BK, 33FT",
+    "precio": null,
+    "stock": null,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "NPC06UVDB-BK017F",
+    "nombre": "NPC Cat 6, UTP, CM, BK, 17FT",
+    "precio": null,
+    "stock": null,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "CTL472K1A",
+    "nombre": "Tableta Digitalizadora One by Wacom - Small",
+    "precio": 28.58,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/WACCTL472K1A/WACCTL472K1A·P.jpg",
+    "marca": "Wacom"
+  },
+  {
+    "codigo": "NPC6ASVDB-WT004F",
+    "nombre": "PATCHCORD XG CATEGORIA 6A F/UTP 4 PIES BLANCO - CO...",
+    "precio": 13.44,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "B-F909",
+    "nombre": "Balun  a presion AHD/HDCVI/HDTVI por par trenzado ...",
+    "precio": 3.1,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Dahua"
+  },
+  {
+    "codigo": "RHFFS",
+    "nombre": "Monitor Dell P Series P2222H 21,5\"",
+    "precio": 135.63,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/DELRHFFS/DELRHFFS·P.jpg",
+    "marca": "Dell Technologies"
+  },
+  {
+    "codigo": "CO155D2-01F006",
+    "nombre": "CO1, Cat 5e, UTP, CM, Black, 6FT",
+    "precio": 7.12,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COMCO155D2-01F006/COMCO155D2-01F006·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "U6-PRO",
+    "nombre": "Access Point WiFi 6 Pro- Punto de acceso WiFi 6 de...",
+    "precio": 180.48,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/UBQU6-PRO/UBQU6-PRO·P.jpg",
+    "marca": "Ubiquiti"
+  },
+  {
+    "codigo": "SDCZ50-032G-B35",
+    "nombre": "Pendrive SanDisk Cruzer Blade CZ50 - 32GB",
+    "precio": 3.88,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/SANSDCZ50-032G-B35/SANSDCZ50-032G-B35·P.jpg",
+    "marca": "SanDisk"
+  },
+  {
+    "codigo": "50UL3J",
+    "nombre": "Pantalla Profesional",
+    "precio": 584.64,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/LGE50UL3J/LGE50UL3J·P.jpg",
+    "marca": "LG"
+  },
+  {
+    "codigo": "PC6-002M-A02LS",
+    "nombre": "Copper, Patch Cord, RJ45, RJ45, Category 6, UTP, T...",
+    "precio": 5.29,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "760006650",
+    "nombre": "Z-012-DS-5K-FSUBK/D",
+    "precio": 5.95,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COM760006650/COM760006650·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "TSB89104US",
+    "nombre": "Mochila Targus Sport 15,6” – Negro",
+    "precio": 26.38,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/TARTSB89104US/TARTSB89104US·P.jpg",
+    "marca": "Targus"
+  },
+  {
+    "codigo": "U-POE-AT-AR",
+    "nombre": "802.3at supported 30W POE Injector",
+    "precio": 16.88,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/UBQU-POE-AT-AR/UBQU-POE-AT-AR·P.jpg",
+    "marca": "Ubiquiti"
+  },
+  {
+    "codigo": "CR-D1",
+    "nombre": "FICHA PLUG MACHO PARA ALIMENTACION CON BORNERAS",
+    "precio": 0.33,
+    "stock": 500,
+    "imagen": "/Style Library/Distecna/img/en-US/NODISPONIBLE_P.jpg",
+    "marca": "Dahua"
+  },
+  {
+    "codigo": "9A6L4-A5",
+    "nombre": "Cable Categoria 6A de 4 pares tendrados solidos F/...",
+    "precio": 338.42,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/SIE9A6L4-A5/SIE9A6L4-A5·P.jpg",
+    "marca": "Siemon"
+  },
+  {
+    "codigo": "910-004800",
+    "nombre": "Mouse Logitech  Inalámbrico M170 Azul",
+    "precio": 6.43,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/LOG910-004800/LOG910-004800·P.jpg",
+    "marca": "Logitech"
+  },
+  {
+    "codigo": "1427071-6",
+    "nombre": "CS30CM BLU C6 4/24 U/UTP RIB 305M",
+    "precio": 172.54,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/COM1427071-6/COM1427071-6·P.jpg",
+    "marca": "Commscope"
+  },
+  {
+    "codigo": "910-005902",
+    "nombre": "Mouse Logitech  inalámbrico M190 gris marengo",
+    "precio": 8.88,
+    "stock": 500,
+    "imagen": "https://docs.distecna.com/articles/LOG910-005902/LOG910-005902·P.jpg",
+    "marca": "Logitech"
+  }
+]

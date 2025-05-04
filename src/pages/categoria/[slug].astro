@@ -1,52 +1,37 @@
 ---
-// src/pages/tienda.astro
-import Pagination from "@/components/Paginatation";
-import Layout from "../layouts/Layout.astro";
-import { actions } from "astro:actions";
-import { Image } from "astro:assets";
-import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
-import { formatPesosArgentinos } from "@/utils/formatcurrency";
+import Layout from "@/layouts/Layout.astro";
 import ProductGrid from "@/components/ProductGrid.astro";
+import Pagination from "@/components/Paginatation";
+import { actions } from "astro:actions";
 import Categorias from "@/components/Categorias.astro";
 
 const searchParams = Astro.url.searchParams;
 const currentPage = parseInt(searchParams.get("pagina") ?? "1", 10);
-const busqueda = searchParams.get("busqueda") ?? "";
-const pageSize = 24;
-
 const orden = searchParams.get("orden") ?? "alfabetico_asc";
+const slug = Astro.params.slug;
+const busqueda = searchParams.get("busqueda") ?? "";
 
-const { data, error } = await Astro.callAction(actions.getProductsByPage, {
+if (!slug) {
+  throw new Error("Slug de categoría no definido");
+}
+const { data, error } = await Astro.callAction(actions.getProductsByCategorySlug, {
   page: currentPage,
-  limit: pageSize,
-  query: busqueda,
+  limit: 24,
   orden,
+  slug,
+  query: busqueda,
 });
 
 if (error) {
-  throw new Error("Error al cargar productos");
+  throw new Error("Error al cargar productos por categoría");
 }
 
-const { products, totalPages } = data;
+const { products, totalPages, categoryName } = data;
 ---
 
-<Layout tittle="Tienda">
-  <!-- Formulario de búsqueda -->
-  <!-- <form method="GET" class="mb-4">
-    <input
-      type="text"
-      name="busqueda"
-      value={busqueda}
-      placeholder="Buscar productos..."
-      class="border px-3 py-2 w-full"
-    />
-    <input type="hidden" name="pagina" value="1" />
-    <button type="submit" class="mt-2 px-4 py-2 bg-black text-white">
-      Buscar
-    </button>
-  </form> -->
-  <section class="container mx-auto py-2 md:py-12 md:px-2">
-    <h1 class="text-2xl font-semibold mb-6">Productos en Tienda</h1>
+<Layout tittle={`Categoría: ${categoryName}`}>
+  <section class="container mx-auto py-12 px-4 md:py-12 md:px-2">
+    <h1 class="text-2xl font-semibold mb-6">Productos en: {categoryName}</h1>
     <div class="flex flex-wrap items-center gap-2 mb-6">
       <a
         href={`?orden=alfabetico_asc${busqueda ? `&busqueda=${busqueda}` : ""}`}
@@ -88,7 +73,7 @@ const { products, totalPages } = data;
       </a>
     </div>
     <div class="container flex">
-      <div class="w-3/12"><Categorias /></div>
+      <div class="w-3/12 sticky top-28 h-fit"><Categorias /></div>
       <div class="w-9/12"><ProductGrid products={products} /></div>
     </div>
     <Pagination
@@ -96,5 +81,6 @@ const { products, totalPages } = data;
       totalPages={totalPages}
       busqueda={busqueda}
     />
+  </section>
   </section>
 </Layout>

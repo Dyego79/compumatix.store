@@ -23,6 +23,8 @@ export const getProductBySlug = defineAction({
         highAverage: true,
         weightAverage: true,
         lengthAverage: true,
+        price: true,
+        iva: true,
         brand: {
           select: {
             id: true,

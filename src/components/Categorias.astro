@@ -1,0 +1,27 @@
+---
+import { slugify } from "@/utils/slugify";
+import { actions } from "astro:actions";
+
+const { data: categories, error } = await Astro.callAction(actions.getAllCategories, {});
+---
+
+{error && <p>Error al cargar categorías</p>}
+
+{categories && categories.length > 0 ? (
+   <ul>
+    {categories.map((cat) => (
+      <li class="flex items-center gap-x-2"><a href={`/categoria/${slugify(cat.name.toLowerCase())}`}>{cat.name} </a><span class="text-gray-600 text-[0.85rem]">- {cat.productCount}</span>
+
+      </li>
+    ))}
+  </ul>
+ /*  <ul>
+    {categories.map((cat) => (
+      <li class="flex items-center gap-x-2"><a href={`/categoria/${slugify(cat.name.toLowerCase())}`}>{cat.name} </a><span class="bg-azulCompumatix inline-flex items-center justify-center h-5 w-5 rounded-full text-white text-[0.65rem] p-1">{cat.productCount}</span>
+
+      </li>
+    ))}
+  </ul> */
+) : (
+  <p>No hay categorías disponibles</p>
+)}

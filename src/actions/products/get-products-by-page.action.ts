@@ -24,8 +24,9 @@ export const getProductsByPage = defineAction({
     orden: string;
   }) => {
     page = page <= 0 ? 1 : page;
-    let orderBy: Prisma.ProductOrderByWithRelationInput = { title: "asc" };
+    const categoriasExcluidas = ["outlet", "hogar"];
 
+    let orderBy: Prisma.ProductOrderByWithRelationInput = { title: "asc" };
     switch (orden) {
       case "precio_asc":
         orderBy = { finalPrice: "asc" };
@@ -42,25 +43,42 @@ export const getProductsByPage = defineAction({
         break;
     }
 
-    /* const where = {
-      OR: [
-        { title: { contains: query, mode: Prisma.QueryMode.insensitive } },
-        { sku: { contains: query, mode: Prisma.QueryMode.insensitive } },
-      ],
-    }; */
-
-    const where = {
+    const where: Prisma.ProductWhereInput = {
       AND: [
         {
           OR: [
-            { title: { contains: query, mode: Prisma.QueryMode.insensitive } },
-            { sku: { contains: query, mode: Prisma.QueryMode.insensitive } },
+            { title: { contains: query, mode: "insensitive" } },
+            { sku: { contains: query, mode: "insensitive" } },
           ],
         },
         {
           stock: {
             not: "Sin stock",
           },
+        },
+        {
+          NOT: [
+            {
+              category: {
+                is: {
+                  name: {
+                    equals: "outlet",
+                    mode: "insensitive",
+                  },
+                },
+              },
+            },
+            {
+              category: {
+                is: {
+                  name: {
+                    equals: "hogar",
+                    mode: "insensitive",
+                  },
+                },
+              },
+            },
+          ],
         },
       ],
     };
@@ -71,7 +89,7 @@ export const getProductsByPage = defineAction({
         where,
         skip: (page - 1) * limit,
         take: limit,
-        orderBy, // 👈 esta es la que definiste arriba con el switch
+        orderBy,
         select: {
           id: true,
           title: true,
@@ -82,22 +100,18 @@ export const getProductsByPage = defineAction({
           finalPrice: true,
           externalId: true,
           cotizacion: true,
+          proveedorIt: true,
           stock: true,
           widthAverage: true,
           highAverage: true,
           weightAverage: true,
           lengthAverage: true,
+          iva: true,
           brand: {
-            select: {
-              id: true,
-              name: true,
-            },
+            select: { id: true, name: true },
           },
           category: {
-            select: {
-              id: true,
-              name: true,
-            },
+            select: { id: true, name: true },
           },
         },
       }),

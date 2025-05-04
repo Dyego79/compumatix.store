@@ -21,6 +21,17 @@ if (error || !data) {
 }
 
 const { product } = data;
+if (!product) {
+  return Astro.redirect("/404");
+}
+
+const precio = formatPesosArgentinos(
+  calcularPrecioConGanancia(
+    Number(product.price ?? 0) *
+      Number(product.cotizacion ?? 0) *
+      (1 + Number(product.iva ?? 0) / 100)
+  )
+);
 
 // Ensure product includes required properties
 product.weightAverage = product.weightAverage ?? 0;
@@ -54,12 +65,12 @@ if (product.externalId) {
 
 <Layout tittle={product.title}>
   <div
-    class="border-2 max-w-[1650px] px-4 mx-auto py-8 grid grid-cols-1 md:grid-cols-2 gap-4"
+    class="container border-2 px-12 mx-auto py-8 grid grid-cols-1 md:grid-cols-12 md:gap-8"
   >
-    <div transition:name={`product-${product.id}-img`}>
+    <div transition:name={`product-${product.id}-img`} class="col-span-5">
       <GaleryProduct images={galleryImages} title={product.title} client:idle />
     </div>
-    <div>
+    <div class="col-span-7">
       <h2
         class="text-2xl md:text-3xl font-bold mt-4"
         transition:name={`title-${product.title}`}
@@ -69,16 +80,12 @@ if (product.externalId) {
       <p class="mt-2 text-2xl">
         Precio:
         <span>
-          {
-            formatPesosArgentinos(
-              calcularPrecioConGanancia(
-                product.finalPrice!.toNumber() * product.cotizacion!.toNumber()
-              )
-            )
-          }
+          {precio}
         </span>
       </p>
-      <p class="mt-1 text-sm text-gray-400">Garantía: {product.warranty}</p>
+      <p class="mt-1 text-sm text-gray-400">
+        Garantía: {product.warranty} Meses
+      </p>
       <p class="mt-6 text-gray-700">
         Stock: {
           product.stock && (
@@ -86,21 +93,23 @@ if (product.externalId) {
           )
         }
       </p>
+      <AddToCart
+        product={{
+          ...product,
+          finalPrice: product.finalPrice?.toNumber() ?? 0,
+          weight: product.weightAverage,
+          height: product.highAverage,
+          width: product.widthAverage,
+          length: product.lengthAverage,
+          cotizacion: product.cotizacion?.toNumber() ?? 0,
+        }}
+        client:load
+      />
     </div>
-    <AddToCart
-      product={{
-        ...product,
-        finalPrice: product.finalPrice?.toNumber() ?? 0,
-        weight: product.weightAverage,
-        height: product.highAverage,
-        width: product.widthAverage,
-        length: product.lengthAverage,
-        cotizacion: product.cotizacion?.toNumber() ?? 0,
-      }}
-      client:load
-    />
   </div>
-  {ficha !== null && <FichaProducto ficha={ficha} server:defer />}
+  <div class="container mx-auto">
+    {ficha !== null && <FichaProducto ficha={ficha} server:defer />}
+  </div>
 </Layout>
 
 <!-- ---

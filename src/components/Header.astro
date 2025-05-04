@@ -5,13 +5,14 @@ const searchParams = Astro.url.searchParams;
 const busqueda = searchParams.get("busqueda") ?? "";
 ---
 
-<header class="sticky top-0 z-10 flex items-center justify-between gap-4 p-4 border-b border-gray-300 bg-grisCompumatix text-slate-200 h-28">
+<header class="h-20 order-b border-gray-300 bg-azulCompumatix sticky top-0 z-10 w-full">
+  <div class="container h-full mx-auto flex items-center justify-between gap-4 p-4 text-slate-200">
   <a href="/tienda" class="flex items-center gap-2">
     <img class="w-36" src={Logo.src} alt="Logo Compumatix" />
     <span class="text-xl font-semibold text-[0%]">Compumatix</span>
   </a>
 
-  <!-- 🔍 Barra de búsqueda -->
+  <!-- 🔍 Barra de búsqueda --> 
   <form method="GET" action="/tienda" class="flex gap-2 items-center max-w-md w-full">
     <div class="relative w-full">
       <!-- 🔍 Icono de lupa -->
@@ -49,7 +50,7 @@ const busqueda = searchParams.get("busqueda") ?? "";
     <!-- 🔘 Botón de enviar búsqueda -->
     <button
       type="submit"
-      class="px-4 py-2 bg-azulCompumatix text-white rounded hover:bg-blue-700"
+      class="px-4 py-2 bg-grisCompumatix text-white rounded hover:bg-blue-700"
     >
       Buscar
     </button>
@@ -63,4 +64,5 @@ const busqueda = searchParams.get("busqueda") ?? "";
     </script>
   )}
   <OffcanvasCarrito client:load/>
+</div>
 </header>

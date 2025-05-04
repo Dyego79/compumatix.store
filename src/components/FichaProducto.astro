@@ -4,6 +4,7 @@ interface Props {
 }
 
 const { ficha } = Astro.props;
+console.log(ficha);
 
 const attributes = ficha.attributes ?? {};
 const attributesEntries = Object.entries(attributes);

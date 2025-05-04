@@ -59,7 +59,7 @@ export default function OffcanvasCarrito() {
     } else {
       gsap.to(drawerRef.current, {
         x: "100%",
-        duration: 0.5,
+        duration: 0.3,
         ease: "power2.in",
       });
     }
@@ -112,7 +112,7 @@ export default function OffcanvasCarrito() {
       {
         opacity: 1,
         y: 0,
-        stagger: 0.08,
+        stagger: 0.15,
         duration: 0.5,
         ease: "power2.out",
         overwrite: true, // por si ya tenían animaciones pendientes
@@ -151,7 +151,7 @@ export default function OffcanvasCarrito() {
       <div
         ref={drawerRef}
         style={{ transform: "translateX(100%)" }}
-        className="rounded-l-xl w-[80%] md:w-[40rem] flex flex-col fixed top-0 right-0 bottom-0 bg-azulCompumatix text-white gap-4 p-4 z-20 shadow-xl"
+        className="rounded-l-xl w-[80%] md:w-[35rem] flex flex-col fixed top-0 right-0 bottom-0 bg-azulCompumatix text-white gap-4 p-4 z-20 shadow-xl"
       >
         <div className="flex items-center justify-between my-3">
           <IoCartSharp size={24} />

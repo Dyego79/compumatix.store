@@ -9,9 +9,9 @@ datasource db {
 }
 
 model Product {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   title         String
-  slug          String   @unique
+  slug          String    @unique
   sku           String
   categoryId    Int
   brandId       Int
@@ -19,28 +19,30 @@ model Product {
   mainImageExp  String?
   warranty      String?
   attributes    Json?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   amountStock   Int?
-  cotizacion    Decimal? @db.Decimal(10, 2)
-  finalPrice    Decimal? @db.Decimal(10, 2)
+  cotizacion    Decimal?  @db.Decimal(10, 2)
+  finalPrice    Decimal?  @db.Decimal(10, 2)
   highAverage   Int?
-  iva           Decimal? @db.Decimal(5, 2)
+  iva           Decimal?  @db.Decimal(5, 2)
   lengthAverage Int?
-  price         Decimal? @db.Decimal(10, 2)
+  price         Decimal?  @db.Decimal(10, 2)
   stock         String?
-  utility       Decimal? @db.Decimal(10, 2)
+  utility       Decimal?  @db.Decimal(10, 2)
   weightAverage Int?
   widthAverage  Int?
-  externalId    Int?     @unique
-  proveedorIt   String?  // Nuevo campo opcional
-  brand         Brand    @relation(fields: [brandId], references: [id])
-  category      Category @relation(fields: [categoryId], references: [id])
+  externalId    Int?      @unique
+  proveedorIt   String?
+  deleted       Boolean   @default(false)
+
+  brand         Brand     @relation(fields: [brandId], references: [id])
+  category      Category  @relation(fields: [categoryId], references: [id])
 
   fichaProducto FichaProducto?
-
-  CartItem CartItem[]
+  CartItem      CartItem[]
 }
+
 
 model CartSession {
   id        String      @id @default(uuid())
@@ -63,8 +65,8 @@ model CartItem {
 
 
 model Category {
-  id       Int       @id
-  name     String
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
   initialB Int?
   initialC Int?
   products Product[]
