@@ -23,6 +23,7 @@ export const getAllCategories = defineAction({
       select: {
         id: true,
         name: true,
+        slug: true, // 👈 ya lo tenés en el select
         _count: {
           select: {
             products: true,
@@ -31,9 +32,11 @@ export const getAllCategories = defineAction({
       },
     });
 
+    // 👉 tenés que incluir `slug` aquí también
     return categories.map((cat) => ({
       id: cat.id,
       name: cat.name,
+      slug: cat.slug, // 👈 agregá esto
       productCount: cat._count.products,
     }));
   },

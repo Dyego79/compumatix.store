@@ -14,15 +14,19 @@ const busqueda = searchParams.get("busqueda") ?? "";
 if (!slug) {
   throw new Error("Slug de categoría no definido");
 }
-const { data, error } = await Astro.callAction(actions.getProductsByCategorySlug, {
-  page: currentPage,
-  limit: 24,
-  orden,
-  slug,
-  query: busqueda,
-});
+const { data, error } = await Astro.callAction(
+  actions.getProductsByCategorySlug,
+  {
+    page: currentPage,
+    limit: 24,
+    orden,
+    slug,
+    query: busqueda,
+  }
+);
 
 if (error) {
+  console.error("❌ Error cargando productos:", error);
   throw new Error("Error al cargar productos por categoría");
 }
 
@@ -31,7 +35,7 @@ const { products, totalPages, categoryName } = data;
 
 <Layout tittle={`Categoría: ${categoryName}`}>
   <section class="container mx-auto py-12 px-4 md:py-12 md:px-2">
-    <h1 class="text-2xl font-semibold mb-6">Productos en: {categoryName}</h1>
+    <h1 class="text-3xl font-bold mb-6">Categoría: {categoryName}</h1>
     <div class="flex flex-wrap items-center gap-2 mb-6">
       <a
         href={`?orden=alfabetico_asc${busqueda ? `&busqueda=${busqueda}` : ""}`}
@@ -81,6 +85,5 @@ const { products, totalPages, categoryName } = data;
       totalPages={totalPages}
       busqueda={busqueda}
     />
-  </section>
   </section>
 </Layout>

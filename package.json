@@ -11,13 +11,15 @@
     "seed:brands": "tsx scripts/seedBrands.ts",
     "seed:products-nb": "tsx scripts/seedProducts_NB.ts",
     "seed:products-elit": "tsx scripts/seedProducts_ELIT.ts",
-    "seed:fichaproducto": "tsx scripts/seedFichaProducto.ts",
+    "seed:products-elit-json": "tsx scripts/seedProducts_ELIT_json.ts",
+    "seed:fichaproducto-nb": "tsx scripts/seedFichaProducto_NB.ts",
     "seed:fichaproducto-elit": "tsx scripts/seedFichaProducto_Elit.ts",
     "seed:uploadimages": "tsx scripts/seeduploadImages.ts",
     "seed:clear": "tsx scripts/seedClearDatabase.ts",
     "seed:verificar": "tsx scripts/verificarimagenes.ts",
     "seed:pricestocknb": "tsx scripts/seedPriceStockNB.ts",
-    "seed:scrapedistecna": "tsx scripts/distecnaScrape.ts"
+    "seed:scrapedistecna": "tsx scripts/distecnaScrape.ts",
+    "seed:updatecatslug": "tsx scripts/updateCategorySlugs.ts"
   },
   "dependencies": {
     "@astrojs/node": "^9.1.3",

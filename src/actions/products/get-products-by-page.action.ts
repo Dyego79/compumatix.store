@@ -57,6 +57,9 @@ export const getProductsByPage = defineAction({
           },
         },
         {
+          deleted: false, // 👈 productos no soft-deleteados
+        },
+        {
           NOT: [
             {
               category: {
@@ -107,6 +110,7 @@ export const getProductsByPage = defineAction({
           weightAverage: true,
           lengthAverage: true,
           iva: true,
+          deleted: true,
           brand: {
             select: { id: true, name: true },
           },

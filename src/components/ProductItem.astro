@@ -21,7 +21,7 @@ const precio = formatPesosArgentinos(
   )
 );
 
-console.log("IVA: ", product.iva);
+console.log("IVA: ", product);
 
 const imageUrl = product.mainImage;
 product.weightAverage = product.weightAverage ?? 0;
@@ -79,6 +79,8 @@ product.lengthAverage = product.lengthAverage ?? 0;
   <p class="text-xl my-3">{precio}</p>
   <!-- <p class="text-xl my-3">{product.price * product.cotizacion}</p> -->
   <p class="text-xl my-3">{product.proveedorIt}</p>
+  <p class="text-xl my-3">{!product.deleted ? "True" : "False"}</p>
+  <p class="text-xl my-3">{product.externalId}</p>
   <!-- <AddToCart
     product={{
       ...product,

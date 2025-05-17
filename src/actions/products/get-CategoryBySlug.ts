@@ -2,15 +2,12 @@ import { defineAction } from "astro:actions";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
-import { slugify } from "@/utils/slugify";
-
 
 const categoriasExcluidas = [
   "hogar",
-  "OUTLET",
+  "outlet",
   "CONTADORAS Y CLASIFICADORAS DE BILLETES",
 ];
-
 
 export const getProductsByCategorySlug = defineAction({
   accept: "json",
@@ -21,32 +18,18 @@ export const getProductsByCategorySlug = defineAction({
     orden: z.string().default("alfabetico_asc"),
     query: z.string().optional().default(""),
   }),
-  handler: async ({
-    slug,
-    page,
-    limit,
-    orden,
-    query,
-  }: {
-    slug: string;
-    page: number;
-    limit: number;
-    query: string;
-    orden: string;
-  }) => {
-    // Buscar la categoría usando el slug generado dinámicamente desde el nombre
-    const categories = await prisma.category.findMany();
-    const category = categories.find((c) => slugify(c.name) === slug);
 
-    if (!category) {
-      throw new Error("Categoría no encontrada");
-    }
+  handler: async ({ slug, page, limit, orden, query }) => {
+    const category = await prisma.category.findUnique({
+      where: { slug },
+    });
 
-    // Construcción del filtro
+    if (!category) throw new Error("Categoría no encontrada");
+
     const where: Prisma.ProductWhereInput = {
       AND: [
         { categoryId: category.id },
-        { stock: { not: "Sin stock" } },
+        { deleted: false }, // 👈 Agregado acá
         {
           OR: [
             { title: { contains: query, mode: "insensitive" } },
@@ -68,7 +51,6 @@ export const getProductsByCategorySlug = defineAction({
       ],
     };
 
-    // Construcción del ordenamiento
     let orderBy: Prisma.ProductOrderByWithRelationInput = { title: "asc" };
     switch (orden) {
       case "precio_asc":
@@ -80,13 +62,8 @@ export const getProductsByCategorySlug = defineAction({
       case "alfabetico_desc":
         orderBy = { title: "desc" };
         break;
-      case "alfabetico_asc":
-      default:
-        orderBy = { title: "asc" };
-        break;
     }
 
-    // Consulta de productos y conteo total
     const [totalRecords, products] = await prisma.$transaction([
       prisma.product.count({ where }),
       prisma.product.findMany({
@@ -109,24 +86,26 @@ export const getProductsByCategorySlug = defineAction({
           highAverage: true,
           weightAverage: true,
           lengthAverage: true,
+          externalId: true,
+          deleted: true,
           category: {
             select: {
               id: true,
               name: true,
+              slug: true,
             },
           },
         },
       }),
     ]);
 
-    // Respuesta final
     return {
       products,
       totalPages: Math.ceil(totalRecords / limit),
       currentPage: page,
       query,
       categoryName: category.name,
-      categorySlug: slugify(category.name),
+      categorySlug: category.slug,
     };
   },
 });
