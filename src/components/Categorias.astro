@@ -1,4 +1,5 @@
 ---
+// src/components/Categorias.astro
 import { slugify } from "@/utils/slugify";
 import { actions } from "astro:actions";
 
@@ -6,7 +7,7 @@ const { data: categories, error } = await Astro.callAction(
   actions.getAllCategories,
   {}
 );
-console.log(categories);
+//console.log(categories);
 ---
 
 {error && <p>Error al cargar categorías</p>}

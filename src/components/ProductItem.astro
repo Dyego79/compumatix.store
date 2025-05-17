@@ -21,7 +21,7 @@ const precio = formatPesosArgentinos(
   )
 );
 
-console.log("IVA: ", product);
+//console.log("IVA: ", product);
 
 const imageUrl = product.mainImage;
 product.weightAverage = product.weightAverage ?? 0;
@@ -53,7 +53,6 @@ product.lengthAverage = product.lengthAverage ?? 0;
     <a href={`/producto/${product.slug}`}>
       <img
         src={product.mainImage}
-        srcset={`${product.mainImage} 400w`}
         sizes="(max-width: 640px) 150px, 400px"
         alt={product.title}
         width="400"
@@ -79,7 +78,7 @@ product.lengthAverage = product.lengthAverage ?? 0;
   <p class="text-xl my-3">{precio}</p>
   <!-- <p class="text-xl my-3">{product.price * product.cotizacion}</p> -->
   <p class="text-xl my-3">{product.proveedorIt}</p>
-  <p class="text-xl my-3">{!product.deleted ? "True" : "False"}</p>
+  <p class="text-xl my-3">{product.amountStock}</p>
   <p class="text-xl my-3">{product.externalId}</p>
   <!-- <AddToCart
     product={{

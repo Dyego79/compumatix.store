@@ -105,6 +105,7 @@ export const getProductsByPage = defineAction({
           cotizacion: true,
           proveedorIt: true,
           stock: true,
+          amountStock: true,
           widthAverage: true,
           highAverage: true,
           weightAverage: true,

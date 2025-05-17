@@ -5,6 +5,7 @@ import Layout from "../layouts/Layout.astro";
 import { actions } from "astro:actions";
 import ProductGrid from "@/components/ProductGrid.astro";
 import Categorias from "@/components/Categorias.astro";
+import OffcanvasFilter from "@/components/OffCanvasFilters";
 
 const searchParams = Astro.url.searchParams;
 const currentPage = parseInt(searchParams.get("pagina") ?? "1", 10);
@@ -44,49 +45,59 @@ const { products, totalPages } = data;
   </form> -->
   <section class="container mx-auto py-2 md:py-12 md:px-2">
     <h1 class="text-2xl font-semibold mb-6">Productos en Tienda</h1>
-    <div class="flex flex-wrap items-center gap-2 mb-6">
-      <a
-        href={`?orden=alfabetico_asc${busqueda ? `&busqueda=${busqueda}` : ""}`}
-        class={`px-3 py-1 rounded border ${
-          orden === "alfabetico_asc"
-            ? "bg-black text-white"
-            : "bg-white text-black"
-        }`}
-      >
-        A - Z
-      </a>
-      <a
-        href={`?orden=alfabetico_desc${busqueda ? `&busqueda=${busqueda}` : ""}`}
-        class={`px-3 py-1 rounded border ${
-          orden === "alfabetico_desc"
-            ? "bg-black text-white"
-            : "bg-white text-black"
-        }`}
-      >
-        Z - A
-      </a>
-      <a
-        href={`?orden=precio_asc${busqueda ? `&busqueda=${busqueda}` : ""}`}
-        class={`px-3 py-1 rounded border ${
-          orden === "precio_asc" ? "bg-black text-white" : "bg-white text-black"
-        }`}
-      >
-        Precio ↑
-      </a>
-      <a
-        href={`?orden=precio_desc${busqueda ? `&busqueda=${busqueda}` : ""}`}
-        class={`px-3 py-1 rounded border ${
-          orden === "precio_desc"
-            ? "bg-black text-white"
-            : "bg-white text-black"
-        }`}
-      >
-        Precio ↓
-      </a>
-    </div>
     <div class="container flex">
-      <div class="w-3/12"><Categorias /></div>
-      <div class="w-9/12"><ProductGrid products={products} /></div>
+      <div class="hidden lg:block lg:w-2/12"><Categorias /></div>
+      <div class="w-full lg:w-10/12">
+        <div class="w-full flex flex-col">
+          <div class="flex justify-between">
+            <OffcanvasFilter client:load />
+            <div class="flex flex-wrap items-center gap-2 mb-6 self-end">
+              <a
+                href={`?orden=alfabetico_asc${busqueda ? `&busqueda=${busqueda}` : ""}`}
+                class={`px-3 py-1 rounded border ${
+                  orden === "alfabetico_asc"
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                A - Z
+              </a>
+              <a
+                href={`?orden=alfabetico_desc${busqueda ? `&busqueda=${busqueda}` : ""}`}
+                class={`px-3 py-1 rounded border ${
+                  orden === "alfabetico_desc"
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                Z - A
+              </a>
+              <a
+                href={`?orden=precio_asc${busqueda ? `&busqueda=${busqueda}` : ""}`}
+                class={`px-3 py-1 rounded border ${
+                  orden === "precio_asc"
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                Precio ↑
+              </a>
+              <a
+                href={`?orden=precio_desc${busqueda ? `&busqueda=${busqueda}` : ""}`}
+                class={`px-3 py-1 rounded border ${
+                  orden === "precio_desc"
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                Precio ↓
+              </a>
+            </div>
+          </div>
+
+          <ProductGrid products={products} />
+        </div>
+      </div>
     </div>
     <Pagination
       currentPage={currentPage}

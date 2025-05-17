@@ -10,6 +10,7 @@ const currentPage = parseInt(searchParams.get("pagina") ?? "1", 10);
 const orden = searchParams.get("orden") ?? "alfabetico_asc";
 const slug = Astro.params.slug;
 const busqueda = searchParams.get("busqueda") ?? "";
+console.log("Slug desde URL:", slug);
 
 if (!slug) {
   throw new Error("Slug de categoría no definido");
