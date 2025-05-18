@@ -87,12 +87,11 @@ export default function OffcanvasFilter() {
     );
   }, [ menu]);
   return (
-    <>
-      <div className="relative border border-amber-300">
+    <div className="block lg:hidden">
+      <div className="relative">
         <button onClick={() => setMenu(true)} className="cursor-pointer  ">
           <IoFilter size={35} />
         </button>
-   
       </div>
 
       {/* Fondo oscuro */}
@@ -123,6 +122,6 @@ export default function OffcanvasFilter() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

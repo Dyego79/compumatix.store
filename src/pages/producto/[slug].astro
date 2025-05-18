@@ -65,7 +65,7 @@ if (product.externalId) {
 
 <Layout tittle={product.title}>
   <div
-    class="container border-2 px-12 mx-auto py-8 grid grid-cols-1 md:grid-cols-12 md:gap-8"
+    class="container border-2 px-3 mx-auto py-8 grid grid-cols-1 md:grid-cols-12 md:gap-8"
   >
     <div transition:name={`product-${product.id}-img`} class="col-span-5">
       <GaleryProduct images={galleryImages} title={product.title} client:idle />

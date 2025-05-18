@@ -51,7 +51,9 @@ const { products, totalPages } = data;
         <div class="w-full flex flex-col">
           <div class="flex justify-between">
             <OffcanvasFilter client:load />
-            <div class="flex flex-wrap items-center gap-2 mb-6 self-end">
+            <div
+              class="flex flex-wrap items-center gap-2 mb-6 self-end border lg:ml-auto"
+            >
               <a
                 href={`?orden=alfabetico_asc${busqueda ? `&busqueda=${busqueda}` : ""}`}
                 class={`px-3 py-1 rounded border ${
