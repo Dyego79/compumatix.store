@@ -6,13 +6,9 @@ import { slugify } from "@/utils/slugify";
 const connectionString = process.env.DATABASE_URL!;
 const sql = postgres(connectionString, { ssl: "require" });
 
-let nextBrandId = 5000;
-let nextCategoryId = 5000;
-
-function shouldUploadImage(url: string | null | undefined): boolean {
-  if (!url) return true;
-  const isUploadThing = url.includes("utfs.io") || url.includes("uploadthing");
-  return !isUploadThing;
+// Normaliza nombre de categoría
+function normalizeCategoryName(name: string) {
+  return name.trim().toLowerCase();
 }
 
 async function getOrCreateBrand(marca: string) {
@@ -22,35 +18,31 @@ async function getOrCreateBrand(marca: string) {
 
   if (existing) return existing.id;
 
-  const max = await sql`
-    SELECT MAX(id) AS max_id FROM "Brand"
-  `.then((res) => res[0]?.max_id ?? 0);
-
-  nextBrandId = Math.max(nextBrandId, max + 1);
-
   const inserted = await sql`
-    INSERT INTO "Brand" (id, name)
-    VALUES (${nextBrandId}, ${marca})
+    INSERT INTO "Brand" (name)
+    VALUES (${marca})
     RETURNING id
   `.then((res) => res[0]);
 
-  nextBrandId++;
   return inserted.id;
 }
 
 async function getOrCreateCategory(name: string) {
-  const normalized = name.trim().toLowerCase();
-  const slug = slugify(normalized);
+  const trimmedName = name.trim();
+  const normalized = normalizeCategoryName(trimmedName);
 
   const existing = await sql`
-    SELECT id FROM "Category" WHERE name_normalized = ${normalized}
+    SELECT id FROM "Category"
+    WHERE LOWER(TRIM(name)) = ${normalized}
   `.then((res) => res[0]);
 
   if (existing) return existing.id;
 
+  const slug = slugify(trimmedName);
+
   const inserted = await sql`
-    INSERT INTO "Category" (name, name_normalized, slug)
-    VALUES (${name.trim()}, ${normalized}, ${slug})
+    INSERT INTO "Category" (name, slug)
+    VALUES (${trimmedName}, ${slug})
     RETURNING id
   `.then((res) => res[0]);
 
@@ -72,7 +64,6 @@ async function fetchProductosElit(limit = 100, offset = 1) {
       method: "POST",
       headers,
       body,
-      redirect: "follow",
     }
   );
 
@@ -146,17 +137,22 @@ async function seedProducts() {
 
           let newImageUrl = imagenes?.[0] ?? "";
 
-          if (
-            shouldUploadImage(existingProduct?.mainImage ?? newImageUrl) &&
-            newImageUrl.includes("images.elit.com.ar")
-          ) {
+          // Si el producto ya tiene mainImage, no volver a subir imagen
+          if (existingProduct?.mainImage) {
+            newImageUrl = existingProduct.mainImage;
+          } else if (newImageUrl.includes("images.elit.com.ar")) {
             try {
               const uploaded = await subirImagenAUploadThing(newImageUrl);
               if (uploaded) newImageUrl = uploaded;
-            } catch (err) {
-              console.error("❌ Error subiendo imagen a UploadThing:", err);
+            } catch (err: any) {
+              if (err.message?.includes("File already exists")) {
+                console.warn("⚠️ Imagen ya subida previamente a UploadThing.");
+              } else {
+                console.error("❌ Error subiendo imagen a UploadThing:", err);
+              }
             }
           }
+
 
           if (existingProduct) {
             console.log(`🔁 Actualizando producto ${id}`);
@@ -192,15 +188,9 @@ async function seedProducts() {
               iva: iva ? Number(iva.toFixed(2)) : null,
               stock: nivel_stock ?? null,
               highAverage: null,
-              lengthAverage: dimensiones?.largo
-                ? Math.round(dimensiones.largo)
-                : null,
-              widthAverage: dimensiones?.ancho
-                ? Math.round(dimensiones.ancho)
-                : null,
-              weightAverage: dimensiones?.alto
-                ? Math.round(dimensiones.alto)
-                : null,
+              lengthAverage: dimensiones?.largo ? Math.round(dimensiones.largo) : null,
+              widthAverage: dimensiones?.ancho ? Math.round(dimensiones.ancho) : null,
+              weightAverage: dimensiones?.alto ? Math.round(dimensiones.alto) : null,
               utility: markup ? Number((markup * 100).toFixed(2)) : null,
               externalId: id,
               proveedorIt: "elit",
@@ -231,13 +221,8 @@ async function seedProducts() {
     await delay(2000);
   }
 
-  console.log(
-    `🏁 Seed finalizado. Total insertados o actualizados: ${totalInserted}`
-  );
-
-  console.log(
-    "🧹 Realizando soft-delete de productos no encontrados en Elit..."
-  );
+  console.log(`🏁 Seed finalizado. Total insertados o actualizados: ${totalInserted}`);
+  console.log("🧹 Realizando soft-delete de productos no encontrados en Elit...");
 
   const { count } = await sql`
     UPDATE "Product"
@@ -247,9 +232,7 @@ async function seedProducts() {
     RETURNING id;
   `.then((res) => ({ count: res.length }));
 
-  console.log(
-    `✅ Soft-delete completado. Productos marcados como deleted: ${count}`
-  );
+  console.log(`✅ Soft-delete completado. Productos marcados como deleted: ${count}`);
 }
 
 seedProducts()

@@ -1,19 +1,10 @@
 ---
-//ProudctItem.astro
-
+// ProductItem.astro
 import { calcularPrecioConGanancia } from "@/utils/calcularGanancia";
 import { formatPesosArgentinos } from "@/utils/formatcurrency";
-import { Image } from "astro:assets";
-import AddToCart from "./AddToCart";
 import { IoCart } from "react-icons/io5";
-import { stringify } from "querystring";
 
 const { product } = Astro.props;
-
-const precioNB = formatPesosArgentinos(
-  calcularPrecioConGanancia(product.finalPrice * product.cotizacion)
-);
-const proveedorIt = product.proveedorIt ?? "Proveedor no disponible";
 
 const precio = formatPesosArgentinos(
   calcularPrecioConGanancia(
@@ -21,81 +12,70 @@ const precio = formatPesosArgentinos(
   )
 );
 
-//console.log("IVA: ", product);
-
+const proveedorIt = product.proveedorIt ?? "Proveedor no disponible";
 const imageUrl = product.mainImage;
-product.weightAverage = product.weightAverage ?? 0;
+/* product.weightAverage = product.weightAverage ?? 0;
 product.highAverage = product.highAverage ?? 0;
 product.widthAverage = product.widthAverage ?? 0;
-product.lengthAverage = product.lengthAverage ?? 0;
+product.lengthAverage = product.lengthAverage ?? 0; */
 ---
 
-<dic
-  class="relative border p-2 flex flex-col bg-white py-4 md:py-6 md:px-3 rounded overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+<div
+  class="relative flex flex-col bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
 >
-  <div class="flex flex-col absolute right-0 top-4 z-[1] items-end">
-    <span
-      class="text-[0.75rem] md:text-sm px-2 py-1 bg-green-600 text-white rounded-l-sm"
-      >EN STOCK</span
-    >
-    <!-- <span
-      class:list={{
-        "bg-green-600 text-white": product.stock === "Alto",
-        "bg-orange-500 text-white": product.stock === "Medio",
-        "bg-red-600 text-white": product.stock === "Bajo",
-      }}
-      class="px-3 py-1 text-[0.62rem] md:text-[0.75rem] w-fit uppercase"
-    >
-      {product.stock}
-    </span> -->
-  </div>
-  <div transition:name={`product-${product.id}-img`}>
-    <a href={`/producto/${product.slug}`}>
+  <div>
+    <!-- STOCK LABEL -->
+    <div class="absolute top-4 right-0 z-2 flex flex-col items-end space-y-1">
+      <span
+        class="bg-green-600 text-white text-xs md:text-sm px-2 py-1 rounded-l-md"
+      >
+        EN STOCK
+      </span>
+    </div>
+
+    <!-- IMAGE -->
+    <a href={`/producto/${product.slug}`} class="mb-4">
       <img
-        src={product.mainImage}
-        sizes="(max-width: 640px) 150px, 400px"
+        src={imageUrl}
         alt={product.title}
         width="400"
         height="400"
         class="w-full h-48 md:h-64 object-contain"
         loading="lazy"
         decoding="async"
-      /></a
-    >
+      />
+    </a>
   </div>
-  <div class="text-gray-400">
-    <p class="text-azulCompumatix rounded-full my-2 text-sm w-fit">
+  <div class="p-4 md:p-6">
+    <p class="text-gray-300 text-[0.75rem] mb-1 uppercase">
+      COD. {
+        `${product.proveedorIt.slice(0, 2).toUpperCase()}-${product.externalId}`
+      }
+    </p>
+    <p class="text-sm text-azulCompumatix font-medium mb-1 uppercase">
       {product.category.name}
     </p>
-  </div>
 
-  <h3
-    class="text-[0.85rem] md:text-[1rem] leading-4 min-h-16"
-    transition:name={`title-${product.title}`}
-  >
-    {product.title}
-  </h3>
-  <p class="text-xl my-3">{precio}</p>
-  <!-- <p class="text-xl my-3">{product.price * product.cotizacion}</p> -->
-  <p class="text-xl my-3">{product.proveedorIt}</p>
-  <p class="text-xl my-3">{product.amountStock}</p>
-  <p class="text-xl my-3">{product.externalId}</p>
-  <!-- <AddToCart
-    product={{
-      ...product,
-      finalPrice: product.finalPrice?.toNumber() ?? 0,
-      weight: product.weightAverage,
-      height: product.highAverage,
-      width: product.widthAverage,
-      length: product.lengthAverage,
-      cotizacion: product.cotizacion?.toNumber() ?? 0,
-    }}
-    client:load
-  /> -->
-  <a
-    href={`/producto/${product.slug}`}
-    class="bg-azulCompumatix rounded-md flex items-center justify-center p-3 text-white font-bold text-sm mt-2 hover:bg-azulCompumatix/80 transition-colors duration-300 ease-in-out"
-    class="bg-azulCompumatix rounded-md flex items-center justify-center p-3 text-white font-bold text-sm mt-2 hover:bg-azulCompumatix/80 transition-colors duration-300 ease-in-out"
-    ><IoCart color="white" size={22} /></a
-  >
-</dic>
+    <!-- TITLE -->
+
+    <h3
+      class="text-base md:text-lg font-semibold text-gray-800 leading-5 mb-2 line-clamp-3 h-[3.5rem] uppercase"
+    >
+      {product.title}
+    </h3>
+
+    <!-- PRICE -->
+    <p class="text-xl font-bold text-gray-900 mb-2">
+      {precio}
+    </p>
+
+    <!-- CTA -->
+    <a
+      href={`/producto/${product.slug}`}
+      class="mt-4 flex items-center justify-center gap-2 bg-azulCompumatix text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-azulCompumatix/90 transition-colors"
+    >
+      <IoCart size={20} />
+      Ver producto
+    </a>
+  </div>
+</div>

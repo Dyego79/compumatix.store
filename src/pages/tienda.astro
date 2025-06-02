@@ -44,12 +44,15 @@ const { products, totalPages } = data;
     </button>
   </form> -->
   <section class="container mx-auto py-2 md:py-12 md:px-2">
-    <h1 class="text-2xl font-semibold mb-6">Productos en Tienda</h1>
+    <div class="text-center p-5">
+      <h1 class="text-2xl font-semibold mb-6">Tienda</h1>
+    </div>
+
     <div class="container flex">
       <div class="hidden lg:block lg:w-2/12"><Categorias /></div>
       <div class="w-full lg:w-10/12">
         <div class="w-full flex flex-col">
-          <div class="flex justify-between">
+          <div class="flex justify-between px-3">
             <OffcanvasFilter client:load />
             <div
               class="flex flex-wrap items-center gap-2 mb-6 self-end border lg:ml-auto"

@@ -6,24 +6,19 @@ import gsap from "gsap";
 import { useCartStore } from "@/stores/useCartStore";
 import { formatPesosArgentinos } from "@/utils/formatcurrency";
 
-const links = [
-  { id: 1, title: "Link 1", url: "#" },
-  { id: 2, title: "Link 2", url: "#" },
-  { id: 3, title: "Link 3", url: "#" },
-  { id: 4, title: "Link 4", url: "#" },
-  { id: 5, title: "Link 5", url: "#" },
-];
+interface Props {
+  name: string;
+  slug: string;
+}
 
-export default function OffcanvasFilter() {
+export default function OffcanvasFilter({ name, slug }: Props) {
   const [menu, setMenu] = useState(false);
   const [load, setLoad] = useState(false);
- 
 
   const drawerRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<HTMLUListElement>(null);
   const currentRef = useRef<HTMLSpanElement>(null);
   const nextRef = useRef<HTMLSpanElement>(null);
-
 
   // Animar el drawer
   useLayoutEffect(() => {
@@ -67,7 +62,6 @@ export default function OffcanvasFilter() {
     setLoad(true);
   }, []);
 
-
   useLayoutEffect(() => {
     if (!menu || !linksRef.current) return;
 
@@ -85,7 +79,7 @@ export default function OffcanvasFilter() {
         overwrite: true, // por si ya tenían animaciones pendientes
       }
     );
-  }, [ menu]);
+  }, [menu]);
   return (
     <div className="block lg:hidden">
       <div className="relative">

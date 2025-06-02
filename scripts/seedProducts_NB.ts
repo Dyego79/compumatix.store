@@ -1,15 +1,14 @@
-// src/scripts/seedProductsNB.ts
-import postgres from "postgres";
+import { PrismaClient } from "@prisma/client";
 import "dotenv/config";
 import { subirImagenAUploadThing } from "@/lib/uploadthingProduct";
 import { obtenerToken } from "@/utils/apiclient";
 import slugify from "slugify";
+import pLimit from "p-limit";
 
-const connectionString = process.env.DATABASE_URL!;
-const sql = postgres(connectionString, { ssl: "require" });
-
+const prisma = new PrismaClient();
 const API_URL = "https://api.nb.com.ar/v1/";
-const CHUNK_SIZE = 50;
+const CHUNK_SIZE = 100; // Aumentamos el tamaño del chunk
+const limit = pLimit(20); // Aumentamos la concurrencia
 
 function generateSlug(title: string, id: number) {
   return `${slugify(title, { lower: true, strict: true })}-${id}`;
@@ -18,7 +17,7 @@ function generateSlug(title: string, id: number) {
 function chunkArray<T>(array: T[], size: number): T[][] {
   const result: T[][] = [];
   for (let i = 0; i < array.length; i += size) {
-    result.push(array.slice(i, i + size));
+    result.push(array.slice(i + 0, i + size));
   }
   return result;
 }
@@ -29,210 +28,189 @@ async function fetchJSON(url: string) {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   });
-
   if (!res.ok) throw new Error(`Error al obtener: ${url}`);
   return res.json();
 }
 
-async function seedProducts() {
-  console.time("⏱ Productos NB");
-
-  const products = await fetchJSON(API_URL);
-  const allExternalIds: number[] = [];
-  const chunks = chunkArray(products, CHUNK_SIZE);
-
-  for (const chunk of chunks) {
-    const insertBatch: any[] = [];
-
-    await Promise.allSettled(
-      chunk.map(async (item: any) => {
-        const slug = generateSlug(item.title, item.id);
-        allExternalIds.push(item.id);
-
-        try {
-          const existingProduct = await sql`
-            SELECT id, "mainImage", "mainImageExp" FROM "Product" WHERE "externalId" = ${item.id}
-          `.then((res) => res[0]);
-
-          const normalizedBrand = slugify(item.brand, {
-            lower: true,
-            strict: true,
-          });
-          const brand = await sql`SELECT id, name FROM "Brand"`.then((res) =>
-            res.find(
-              (b: any) =>
-                slugify(b.name, { lower: true, strict: true }) ===
-                normalizedBrand
-            )
-          );
-          if (!brand) {
-            await sql`INSERT INTO "Brand" (id, name) VALUES (${item.brandId}, ${item.brand})`.catch(
-              () => {}
-            );
-          }
-
-          const normalizedCategory = slugify(item.category, {
-            lower: true,
-            strict: true,
-          });
-          const category = await sql`SELECT id, name FROM "Category"`.then(
-            (res) =>
-              res.find(
-                (c: any) =>
-                  slugify(c.name, { lower: true, strict: true }) ===
-                  normalizedCategory
-              )
-          );
-          if (!category) {
-            await sql`INSERT INTO "Category" (id, name, "initialB", "initialC") VALUES (${item.categoryId}, ${item.category}, 0, 0)`.catch(
-              () => {}
-            );
-          }
-
-          let mainImage = item.mainImage ?? "";
-          let mainImageExp = item.mainImageExp ?? "";
-
-          // Si ya existe el producto, actualizar precios y tal vez imágenes si corresponde
-          if (existingProduct) {
-            if (
-              mainImage &&
-              !mainImage.includes("uploadthing.com") &&
-              mainImage.includes("static.nb.com.ar")
-            ) {
-              try {
-                mainImage = await subirImagenAUploadThing(mainImage);
-              } catch (error) {
-                console.error(
-                  `❌ Error subiendo mainImage: ${mainImage}`,
-                  error
-                );
-              }
-            } else {
-              mainImage = existingProduct.mainImage;
-            }
-
-            if (
-              mainImageExp &&
-              !mainImageExp.includes("uploadthing.com") &&
-              mainImageExp.includes("static.nb.com.ar")
-            ) {
-              try {
-                mainImageExp = await subirImagenAUploadThing(mainImageExp);
-              } catch (error) {
-                console.error(
-                  `❌ Error subiendo mainImageExp: ${mainImageExp}`,
-                  error
-                );
-              }
-            } else {
-              mainImageExp = existingProduct.mainImageExp;
-            }
-
-            await sql`
-              UPDATE "Product"
-              SET
-                "price" = ${item.price?.value ?? 0},
-                "finalPrice" = ${item.price?.finalPrice ?? 0},
-                "iva" = ${item.price?.iva ?? 0},
-                "cotizacion" = ${item.cotizacion ?? null},
-                "mainImage" = ${mainImage},
-                "mainImageExp" = ${mainImageExp},
-                "updatedAt" = NOW()
-              WHERE "externalId" = ${item.id}
-            `;
-          } else {
-            if (mainImage && mainImage.includes("static.nb.com.ar")) {
-              try {
-                mainImage = await subirImagenAUploadThing(mainImage);
-              } catch (error) {
-                console.error(
-                  `❌ Error subiendo mainImage: ${mainImage}`,
-                  error
-                );
-              }
-            }
-
-            if (mainImageExp && mainImageExp.includes("static.nb.com.ar")) {
-              try {
-                mainImageExp = await subirImagenAUploadThing(mainImageExp);
-              } catch (error) {
-                console.error(
-                  `❌ Error subiendo mainImageExp: ${mainImageExp}`,
-                  error
-                );
-              }
-            }
-
-            insertBatch.push({
-              id: sql`gen_random_uuid()`,
-              title: item.title,
-              slug,
-              sku: item.sku,
-              categoryId: item.categoryId,
-              brandId: item.brandId,
-              mainImage:
-                mainImage || "https://static.nb.com.ar/img/no-image.png",
-              mainImageExp: mainImageExp || null,
-              warranty: item.warranty ?? null,
-              stock: item.stock ?? null,
-              amountStock: item.amountStock ?? null,
-              highAverage: item.highAverage
-                ? Math.round(item.highAverage)
-                : null,
-              widthAverage: item.widthAverage
-                ? Math.round(item.widthAverage)
-                : null,
-              lengthAverage: item.lengthAverage
-                ? Math.round(item.lengthAverage)
-                : null,
-              weightAverage: item.weightAverage
-                ? Math.round(item.weightAverage)
-                : null,
-              price: item.price?.value ?? 0,
-              finalPrice: item.price?.finalPrice ?? 0,
-              iva: item.price?.iva ?? 0,
-              cotizacion: item.cotizacion ?? null,
-              utility: item.utility ?? null,
-              proveedorIt: "nb",
-              externalId: item.id,
-              deleted: false,
-              createdAt: sql`NOW()`,
-              updatedAt: sql`NOW()`,
-            });
-          }
-        } catch (error) {
-          console.error(`❌ Error procesando producto ${item.title}:`, error);
-        }
-      })
-    );
-
-    if (insertBatch.length > 0) {
-      try {
-        await sql`INSERT INTO "Product" ${sql(insertBatch)}`;
-        console.log(`✅ Insertados ${insertBatch.length} productos nuevos.`);
-      } catch (error) {
-        console.error(`❌ Error insertando nuevos productos:`, error);
-      }
-    }
+async function subirConTimeout(url: string) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000); // reducimos timeout
+  try {
+    return await subirImagenAUploadThing(url);
+  } finally {
+    clearTimeout(timeout);
   }
-
-  console.log("🧹 Realizando soft-delete de productos no encontrados en NB...");
-  const { count } = await sql`
-    UPDATE "Product"
-    SET "deleted" = true
-    WHERE "proveedorIt" = 'nb'
-      AND NOT ("externalId" = ANY(${Array.from(allExternalIds)}))
-    RETURNING id;
-  `.then((res) => ({ count: res.length }));
-
-  console.log(
-    `✅ Soft-delete completado. Productos marcados como deleted: ${count}`
-  );
-  await sql.end();
-  console.timeEnd("⏱ Productos NB");
 }
 
-seedProducts().catch((err) => {
-  console.error("❌ Error general en seedProducts:", err);
-  sql.end();
-});
+async function seedProducts() {
+  console.time("⏱ Productos NB");
+  try {
+    const products = await fetchJSON(API_URL);
+    const allExternalIds: number[] = [];
+    const chunks = chunkArray(products, CHUNK_SIZE);
+    let updatedCount = 0;
+    let createdCount = 0;
+
+    await Promise.all(
+      chunks.flatMap((chunk) =>
+        chunk.map((item: any) =>
+          limit(async () => {
+            try {
+              const slug = generateSlug(item.title, item.id);
+              allExternalIds.push(item.id);
+
+              await prisma.brand.upsert({
+                where: { id: item.brandId },
+                update: {},
+                create: {
+                  id: item.brandId,
+                  name: item.brand,
+                },
+              });
+
+              try {
+                await prisma.category.upsert({
+                  where: { id: item.categoryId },
+                  update: {},
+                  create: {
+                    id: item.categoryId,
+                    name: item.category,
+                    slug: slugify(item.category, { lower: true }),
+                    initialB: 0,
+                    initialC: 0,
+                  },
+                });
+              } catch (err: any) {
+                if (err.code !== "P2002") throw err;
+              }
+
+              const existing = await prisma.product.findUnique({
+                where: { externalId: item.id },
+              });
+
+              let mainImage = item.mainImage ?? "";
+              let mainImageExp = item.mainImageExp ?? "";
+
+              const shouldUpload = (url: string | null | undefined) => {
+                if (!url) return false;
+                const isUploadThing =
+                  url.includes("uploadthing") || url.includes("utfs.io");
+                return !isUploadThing && url.includes("static.nb.com.ar");
+              };
+
+              if (!existing?.mainImage && shouldUpload(mainImage)) {
+                try {
+                  mainImage = await subirConTimeout(mainImage);
+                } catch (e) {
+                  console.error("❌ Error subiendo mainImage:", e);
+                }
+              } else if (existing?.mainImage) {
+                mainImage = existing.mainImage;
+              }
+
+              if (!existing?.mainImageExp && shouldUpload(mainImageExp)) {
+                try {
+                  mainImageExp = await subirConTimeout(mainImageExp);
+                } catch (e) {
+                  console.error("❌ Error subiendo mainImageExp:", e);
+                }
+              } else if (existing?.mainImageExp) {
+                mainImageExp = existing.mainImageExp;
+              }
+
+              const deleted = !(item.amountStock && item.amountStock > 0);
+
+              if (existing) {
+                await prisma.product.update({
+                  where: { externalId: item.id },
+                  data: {
+                    price: item.price?.value ?? 0,
+                    finalPrice: item.price?.finalPrice ?? 0,
+                    iva: item.price?.iva ?? 0,
+                    cotizacion: item.cotizacion ?? null,
+                    mainImage,
+                    mainImageExp,
+                    updatedAt: new Date(),
+                    deleted,
+                  },
+                });
+                updatedCount++;
+              } else {
+                const categoryExists = await prisma.category.findUnique({
+                  where: { id: item.categoryId },
+                });
+                if (!categoryExists)
+                  throw new Error(
+                    `Categoría con ID ${item.categoryId} no existe.`
+                  );
+
+                await prisma.product.create({
+                  data: {
+                    title: item.title,
+                    slug,
+                    sku: item.sku,
+                    categoryId: item.categoryId,
+                    brandId: item.brandId,
+                    mainImage:
+                      mainImage || "https://static.nb.com.ar/img/no-image.png",
+                    mainImageExp: mainImageExp || null,
+                    warranty: item.warranty ?? null,
+                    stock: item.stock ?? null,
+                    amountStock: item.amountStock ?? null,
+                    highAverage: item.highAverage
+                      ? Math.round(item.highAverage)
+                      : null,
+                    widthAverage: item.widthAverage
+                      ? Math.round(item.widthAverage)
+                      : null,
+                    lengthAverage: item.lengthAverage
+                      ? Math.round(item.lengthAverage)
+                      : null,
+                    weightAverage: item.weightAverage
+                      ? Math.round(item.weightAverage)
+                      : null,
+                    price: item.price?.value ?? 0,
+                    finalPrice: item.price?.finalPrice ?? 0,
+                    iva: item.price?.iva ?? 0,
+                    cotizacion: item.cotizacion ?? null,
+                    utility: item.utility ?? null,
+                    proveedorIt: "nb",
+                    externalId: item.id,
+                    deleted,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                  },
+                });
+                createdCount++;
+              }
+              console.log(`✅ Procesado producto: ${item.id} - ${item.title}`);
+            } catch (e) {
+              console.error(`❌ Error procesando producto ID ${item.id}:`, e);
+            }
+          })
+        )
+      )
+    );
+
+    const deleted = await prisma.product.updateMany({
+      where: {
+        proveedorIt: "nb",
+        externalId: { notIn: allExternalIds },
+      },
+      data: { deleted: true },
+    });
+
+    console.log(
+      `✅ Soft-delete completado. Productos marcados como deleted: ${deleted.count}`
+    );
+    console.log(`🆕 Productos creados: ${createdCount}`);
+    console.log(`♻️ Productos actualizados: ${updatedCount}`);
+  } catch (error) {
+    console.error("❌ Error general en seedProducts:", error);
+  } finally {
+    await prisma.$disconnect();
+    console.timeEnd("⏱ Productos NB");
+  }
+}
+
+seedProducts();

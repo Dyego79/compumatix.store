@@ -43,6 +43,7 @@
     "gsap": "^3.12.7",
     "jsdom": "^26.1.0",
     "lucide-react": "^0.487.0",
+    "p-limit": "^6.2.0",
     "postgres": "^3.4.5",
     "puppeteer": "^24.7.2",
     "react": "^19.1.0",

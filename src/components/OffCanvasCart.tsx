@@ -1,6 +1,6 @@
 "use client";
 
-import { IoCartSharp, IoClose } from "react-icons/io5";
+import { IoCartOutline, IoCartSharp, IoClose } from "react-icons/io5";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useCartStore } from "@/stores/useCartStore";
@@ -123,7 +123,7 @@ export default function OffcanvasCarrito() {
     <>
       <div className="relative">
         <button onClick={() => setMenu(true)} className="cursor-pointer  ">
-          <IoCartSharp size={35} />
+          <IoCartOutline size={35} color="white" />
         </button>
         <div className="h-6 w-6 right-[-30%] top-[-30%] bg-amber-500 text-white rounded-full overflow-hidden text-sm font-bold absolute">
           <span

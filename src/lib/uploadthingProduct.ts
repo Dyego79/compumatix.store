@@ -16,6 +16,7 @@ export async function subirImagenAUploadThing(
 
     const filename = path.basename(new URL(url).pathname);
     const tempPath = path.join(tmpdir(), filename);
+
     await pipeline(res.body, fs.createWriteStream(tempPath));
 
     const buffer = fs.readFileSync(tempPath);
@@ -23,9 +24,13 @@ export async function subirImagenAUploadThing(
     blob.name = filename;
 
     const result = await utapi.uploadFiles([blob]);
-    fs.unlinkSync(tempPath);
 
-    return result[0]?.data?.ufsUrl ?? null;
+    if (fs.existsSync(tempPath)) {
+      fs.unlinkSync(tempPath); // Evita error ENOENT
+    }
+
+    // ✅ Usa la URL recomendada por UploadThing v9+
+    return result?.[0]?.data?.ufsUrl ?? null;
   } catch (err) {
     console.error(`❌ Error subiendo ${url}`, err);
     return null;
