@@ -1,0 +1,24 @@
+---
+// src/components/Breadcrumb.astro
+const { items = [] } = Astro.props;
+---
+
+<nav class="text-sm mb-4 text-gray-600 overflow-x-auto whitespace-nowrap">
+  <ul class="flex gap-1 items-center w-max min-w-full">
+    {items.map((item: any, index: number) => (
+      <>
+        <li class="max-w-[160px] truncate">
+          {item.href ? (
+            <a href={item.href} class="hover:underline text-blue-600 inline-block max-w-full truncate">
+              {item.label}
+            </a>
+          ) : (
+            <span class="inline-block max-w-full truncate font-semibold">{item.label}</span>
+          )}
+        </li>
+        {index < items.length - 1 && <span class="mx-1">/</span>}
+      </>
+    ))}
+  </ul>
+</nav>
+

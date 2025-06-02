@@ -81,8 +81,13 @@ async function seedProducts() {
                   },
                 });
               } catch (err: any) {
+                console.error(
+                  `❌ Error al insertar/actualizar categoría ${item.categoryId} (${item.category})`,
+                  err
+                );
                 if (err.code !== "P2002") throw err;
               }
+
 
               const existing = await prisma.product.findUnique({
                 where: { externalId: item.id },

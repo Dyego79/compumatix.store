@@ -5,25 +5,43 @@ const { data: categories, error } = await Astro.callAction(
   actions.getAllCategories,
   {}
 );
+
+console.log("Categorías:", categories);
+
+const agrupaciones = {
+  Memorias: [1, 182, 187, 417, 42], // id de cada subcategoría relacionada
+  Impresoras: [12, 136, 137, 144, 138, 142],
+  Motherboards: [14, 37, 70, 266],
+  Discos: [2, 56, 101, 5003, 57, 5004],
+  Notebooks: [26, 140, 344],
+  Gabinetes: [18, 118],
+  Mousepads: [55, 350],
+  "Placas de Video": [23, 106],
+  "UPS y Estabilizadores": [27, 5005, 454],
+};
 ---
 
 {error && <p>Error al cargar categorías</p>}
 
 {
-  categories && categories.length > 0 ? (
-    <ul>
-      {categories
-        .filter((cat) => cat.productCount > 0) // ✅ filtrar
-        .map((cat) => (
-          <li class="flex items-center gap-x-2">
-            <a href={`/categoria/${cat.slug}`}>{cat.name}</a>
-            <span class="text-gray-600 text-[0.85rem]">
-              - {cat.productCount}
-            </span>
-          </li>
-        ))}
-    </ul>
-  ) : (
-    <p>No hay categorías disponibles</p>
-  )
+  Object.entries(agrupaciones).map(([grupo, ids]) => {
+    const subcategorias = Array.isArray(categories)
+      ? categories.filter((cat) => ids.includes(cat.id) && cat.productCount > 0)
+      : [];
+    return subcategorias.length > 0 ? (
+      <div>
+        <h3 class="font-bold text-lg mb-2">{grupo}</h3>
+        <ul class="mb-6">
+          {subcategorias.map((cat) => (
+            <li class="flex items-center gap-x-2">
+              <a href={`/categoria/${cat.slug}`}>{cat.name}</a>
+              <span class="text-gray-600 text-[0.85rem]">
+                - {cat.productCount}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : null;
+  })
 }

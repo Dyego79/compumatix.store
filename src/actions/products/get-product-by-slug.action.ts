@@ -35,6 +35,7 @@ export const getProductBySlug = defineAction({
           select: {
             id: true,
             name: true,
+            slug: true,
           },
         },
       },
